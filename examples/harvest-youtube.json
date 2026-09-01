@@ -1,0 +1,266 @@
+{
+ "started": "2026-09-01 13:12",
+ "port": 9333,
+ "args": {
+  "port": 9333,
+  "out": "/tmp/harvest-final",
+  "max_per_tab": 4,
+  "max_total": 24,
+  "allow_tabs": true,
+  "tab_budget": 6,
+  "timeout_ms": 15000
+ },
+ "tabs": [
+  {
+   "kind": "tab",
+   "index": 0,
+   "url": "https://example.com/",
+   "title": "Example Domain",
+   "error": null,
+   "video": null,
+   "tweets": null
+  },
+  {
+   "kind": "tab",
+   "index": 1,
+   "url": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+   "title": "Me at the zoo - YouTube",
+   "error": null,
+   "video": {
+    "videoId": "jNQXAC9IVRw",
+    "title": "Me at the zoo",
+    "author": "jawed",
+    "lengthSeconds": 19,
+    "viewCount": 411920053,
+    "keywords": [
+     "me at the zoo",
+     "jawed karim",
+     "first youtube video"
+    ],
+    "transcript_src": "ytdlp-json3-manual",
+    "chapters": [
+     {
+      "ts": "00:00",
+      "title": "Intro"
+     },
+     {
+      "ts": "00:05",
+      "title": "The cool thing"
+     },
+     {
+      "ts": "00:17",
+      "title": "End"
+     }
+    ],
+    "transcript": [
+     {
+      "t": 1.2,
+      "text": "All right, so here we are, in front of the elephants the cool thing about these guys is that they have really... really really long trunks and that's cool (baaaaaaaaaaahhh!!) and that's pretty much all there is to say"
+     }
+    ],
+    "description_head": "Microplastics are accumulating in human brains at an alarming rate\nhttps://www.youtube.com/watch?v=0PT5c1z3LL8\n\n“Nanoplastics and Human Health” with Matthew J Campen, PhD, MSPH\nhttps://www.youtube.com/watch?v=RRBN_4L09Mg\n\n00:00 Intro\n00:05 The cool thing\n00:17 End"
+   },
+   "tweets": null
+  }
+ ],
+ "tier1": [
+  {
+   "href": "https://iana.org/domains/example",
+   "from": "https://example.com/",
+   "score": 2,
+   "anchor": "Learn more",
+   "title": "Example Domains",
+   "text": "Example Domains\n\n \n \n \n \n \n \n \n \n \n\n \n\n \n \n\n \nInstructions and Guides\n\nAs described in RFC 2606 and RFC 6761, a\nnumber of domains such as example.com and example.org are maintained\nfor documentation purposes. These domains may be used as illustrative\nexamples in documents without prior coordination with us. They are not\navailable for registration or transfer.\n\nWe provide a web service on the example domain hosts to provide basic\ninformation on the purpose of the domain. These web services are\nprovided as best effort, but are not designed to support production\napplications. While incidental traffic for incorrectly configured\napplications is expected, please do not design applications that require\nthe example domains to have operating HTTP service.\n\nIANA-managed Reserved Domains\n\nLast revised 2017-05-13.",
+   "headings": [
+    {
+     "level": 1,
+     "text": "Example Domains"
+    },
+    {
+     "level": 2,
+     "text": "Further Reading"
+    }
+   ],
+   "fetch": "api",
+   "kind": "page",
+   "video": null,
+   "description": ""
+  },
+  {
+   "href": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+   "from": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+   "score": 12,
+   "anchor": "",
+   "title": "Me at the zoo",
+   "text": "",
+   "headings": [],
+   "fetch": "api-yt-static",
+   "kind": "video",
+   "video": {
+    "videoId": "jNQXAC9IVRw",
+    "title": "Me at the zoo",
+    "author": "jawed",
+    "lengthSeconds": 19,
+    "viewCount": "411920053",
+    "keywords": [
+     "me at the zoo",
+     "jawed karim",
+     "first youtube video"
+    ],
+    "transcript_src": "ytdlp-json3-manual",
+    "chapters": [
+     {
+      "ts": "00:00",
+      "title": "Intro"
+     },
+     {
+      "ts": "00:05",
+      "title": "The cool thing"
+     },
+     {
+      "ts": "00:17",
+      "title": "End"
+     }
+    ],
+    "transcript": [
+     {
+      "t": 1.2,
+      "text": "All right, so here we are, in front of the elephants the cool thing about these guys is that they have really... really really long trunks and that's cool (baaaaaaaaaaahhh!!) and that's pretty much all there is to say"
+     }
+    ],
+    "description_head": "Microplastics are accumulating in human brains at an alarming rate\nhttps://www.youtube.com/watch?v=0PT5c1z3LL8\n\n“Nanoplastics and Human Health” with Matthew J Campen, PhD, MSPH\nhttps://www.youtube.com/watch?v=RRBN_4L09Mg\n\n00:00 Intro\n00:05 The cool thing\n00:17 End"
+   }
+  },
+  {
+   "href": "https://www.youtube.com/watch?v=HHp4rjhJsWI",
+   "from": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+   "score": 12,
+   "anchor": "Next (SHIFT+n)",
+   "title": "Moody Gardens Penguin Cam LIVE | Penguin Habitat Stream at the Aquarium in Galveston, Texas",
+   "text": "",
+   "headings": [],
+   "fetch": "api-yt-static",
+   "kind": "video",
+   "video": {
+    "videoId": "HHp4rjhJsWI",
+    "title": "Moody Gardens Penguin Cam LIVE | Penguin Habitat Stream at the Aquarium in Galveston, Texas",
+    "author": "Moody Gardens",
+    "lengthSeconds": 0,
+    "viewCount": "8435600",
+    "keywords": [],
+    "transcript_src": "tab-no-transcript",
+    "chapters": [],
+    "transcript": null,
+    "description_head": "Plan your trip: https://www.moodygardens.com/\nMore LIVE Webcams: https://www.moodygardens.com/webcams\nLearn more about the Aquarium Pyramid: https://www.moodygardens.com/attractions/aquarium-pyramid\n\n🐧 Watch our penguins live 24/7 from the Aquarium Pyramid at Moody Gardens in Galveston, Texas. See them swim, waddle, socialize, and explore their habitat anytime, day or night — no ticket required.\n \nThis penguin livestream offers a behind-the-scenes look at one of the Aquarium Pyramid's most popular exhibits, home to playful, curious penguins known for their strong group dynamics and impressive swimming abilities. You may catch feeding sessions, high-speed swimming bursts, and social interactions throughout the day.\n \n🎥 Tip: Penguin activity varies by time of day and husbandry schedule — che"
+   }
+  },
+  {
+   "href": "https://www.youtube.com/watch?v=PU-iJqVSohw",
+   "from": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+   "score": 12,
+   "anchor": "5:00harry potter but it's a comedySiriusly3.1m views • 4 years agoLivePlaylist ()Mix (50+)",
+   "title": "harry potter but it's a comedy",
+   "text": "",
+   "headings": [],
+   "fetch": "api-yt-static",
+   "kind": "video",
+   "video": {
+    "videoId": "PU-iJqVSohw",
+    "title": "harry potter but it's a comedy",
+    "author": "Siriusly",
+    "lengthSeconds": 299,
+    "viewCount": "3125302",
+    "keywords": [],
+    "transcript_src": "ytdlp-json3-manual",
+    "chapters": [],
+    "transcript": [
+     {
+      "t": 0.0,
+      "text": "ah Professor I would trust Hagrid with my life [Applause] dry up dursley you great oh I'm I'm not Harry I hey it's an outrage it's a scandal get out of my house I can't tell you how pleased I am to meet you hello Professor I didn't see you there oh nice to meet you perhaps this no no definitely not no matter I wonder"
+     },
+     {
+      "t": 89.4,
+      "text": "[Music] of course I've only tried a few simple ones myself but they've all worked for me for example assistant before we begin Professor Dumbledore would like to say a few words I have a few start of term notices I wish to announce 472 points to Gryffindor also Slytherin house is out of bounds to everyone who does not wish to die a most"
+     },
+     {
+      "t": 126.6,
+      "text": "painful death thank you not Slytherin eh better be Slytherin everyone will please panic now teachers will follow me to the dungeons to murder Harry Potter amazing can you imagine they're looking on we're gonna go space if we were late few canes of balls it's called the quaffle with me so far no the only thing I want you to worry about"
+     },
+     {
+      "t": 190.7,
+      "text": "is this with me so far no what do I do with it you catch it with me so far no oh you better take this no you not a nasty little bugger let's stop you're going to take someone's eye out when guardian love you [Music] who's that Voldemort [Music] come here Potter now come here now come here is he all right relax Dear Boy it was"
+     },
+     {
+      "t": 261.3,
+      "text": "best all around he will die as a school treat Ronald Weasley has been destroyed [Applause] you serious [Music]"
+     }
+    ],
+    "description_head": "philosopher's stone but it's a comedy – hey y'all guess who's finally back?! had a lot of fun making this one and decided to adopt a very different, more ytp-esque editing style. let me know what you think!\n\nand yes, that was probably the longest upload gap of all time but I'm back to stay this time! more regular uploads coming your way:)\n\n~No Copyright Infringement Intended!~\nCopyright Disclaimer Under Section 107 of the Copyright Act 1976, allowance is made for \"fair use\" for purposes such as criticism, comment, news reporting, teaching, scholarship, and research. Fair use is a use permitted by copyright statute that might otherwise be infringing. Non-profit, educational or personal use tips the balance in favour of fair use. No copyright infringement intended. All rights belong to their"
+   }
+  },
+  {
+   "href": "https://www.youtube.com/watch?v=h4rZt2vNyEg",
+   "from": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+   "score": 12,
+   "anchor": "2:00:01Pablo Picasso Style Cubism Painting For Your Tv Modern Art Screensaver Wallpaper Fine Art BackgroundSo Arty!25k views • 11 months ago",
+   "title": "Pablo Picasso Style Cubism Painting For Your Tv Modern Art Screensaver Wallpaper Fine Art Background",
+   "text": "",
+   "headings": [],
+   "fetch": "api-yt-static",
+   "kind": "video",
+   "video": {
+    "videoId": "h4rZt2vNyEg",
+    "title": "Pablo Picasso Style Cubism Painting For Your Tv Modern Art Screensaver Wallpaper Fine Art Background",
+    "author": "So Arty!",
+    "lengthSeconds": 7200,
+    "viewCount": "25828",
+    "keywords": [
+     "#GoldFramedVintageArt",
+     "#FramedArt",
+     "#ArtForTv",
+     "#FramedTvart",
+     "#VintageArt",
+     "#GoldFramedArt",
+     "#IllusionistArt",
+     "#TvScreensaver",
+     "#ScreensaverArt",
+     "#Wallpaper",
+     "#4KScreensaver",
+     "#HomeDecor",
+     "#ArtForWalls",
+     "#BackgroundArt",
+     "#TvArtScreensaver",
+     "#OilPainting",
+     "#MoodyArt",
+     "#4KFrame",
+     "#CottageArt",
+     "#RelaxationArt",
+     "#Vintageframeart",
+     "#VintageFrame",
+     "#FramedPainting",
+     "#ContemporaryArt",
+     "#ModernArt",
+     "#AbstractPainting",
+     "#GalleryArt",
+     "#ColourfulModernArt",
+     "#AbstractArtForTv",
+     "#ArtGallery",
+     "#ContemporaryOilPainting",
+     "#Picasso",
+     "#PabloPicasso",
+     "#CubismArt",
+     "#RealismArt"
+    ],
+    "transcript_src": "tab-no-transcript",
+    "chapters": [],
+    "transcript": null,
+    "description_head": "🎨🖌 Step into a world where vibrant colours collide and shapes dance in harmony! This stunning modern abstract painting captures the essence of female faces through the lens of cubism, inspired by the legendary Pablo Picasso. Each brushstroke reveals a kaleidoscope of emotions, as geometric forms intertwine to create a captivating visual narrative. The bold hues draw your eyes in, inviting you to explore the intricate details and the stories they tell.\nFramed in an elegant gold frame, this masterpiece is not just a painting; it’s a statement piece that transforms any room into a gallery of creativity. Perfect for sparking conversations and igniting inspiration, this artwork is a true centerpiece that celebrates the beauty of abstraction and the complexity of femininity.\nJoin us as we delve "
+   }
+  }
+ ],
+ "errors": [],
+ "per_tab_tier1": {
+  "https://example.com/": 1,
+  "https://www.youtube.com/watch?v=jNQXAC9IVRw": 4
+ }
+}
