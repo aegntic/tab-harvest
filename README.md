@@ -46,18 +46,18 @@ Outputs land in the harvest dir: `harvest.md`, `harvest.json`,
 
 ## Files
 
-- `examples/` — a real harvested session (YouTube tab + tier-1 videos) with its
+- `examples/` - a real harvested session (YouTube tab + tier-1 videos) with its
   rendered `graph-youtube.html`; open it to see the knowledge-graph output
   without running anything
-- `scripts/dev/` — headless CDP test rigs (basic + YouTube) for verifying the
+- `scripts/dev/` - headless CDP test rigs (basic + YouTube) for verifying the
   harvester without touching your real browser
 
-- `SKILL.md` — full workflow, bring-up recipes, agent distillation protocol,
+- `SKILL.md` - full workflow, bring-up recipes, agent distillation protocol,
   design contract for the graph presentation
-- `scripts/harvest.py` — the two-tier CDP harvester (YouTube transcript
+- `scripts/harvest.py` - the two-tier CDP harvester (YouTube transcript
   waterfall: yt-dlp → in-page timedtext → static refetch → transcript-panel
   scrape; X tweet extraction; tier-1 scoring)
-- `scripts/graph_builder.py` — payload → graph.json + graph.html renderer;
+- `scripts/graph_builder.py` - payload → graph.json + graph.html renderer;
   `--refresh` re-renders agent-enriched graphs
 
 ## Requirements

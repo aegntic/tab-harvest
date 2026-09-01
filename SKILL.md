@@ -1,6 +1,6 @@
 ---
 name: tab-harvest
-description: "Extract all details and actionable knowledge from every open browser tab plus their best next-tier links, video-first: YouTube tabs get full metadata, chapters, and complete transcripts; X/Twitter tabs get tweet/thread extraction; tier-1 scoring surfaces more videos and threads from every page. Attaches over CDP to the user's already-running browser, read-only. Use when the user says harvest my tabs, distill my browser session, extract from open tabs/videos, or wants knowledge captured before closing tabs."
+description: "Use when the user says harvest my tabs, distill my browser session, or wants knowledge extracted from open tabs: attaches over CDP read-only, dumps every tab structured (YouTube tabs as video + full transcript, X tabs as tweets), scores and fetches the best tier-1 links, and renders an interactive knowledge graph."
 tags: [browser, cdp, tabs, harvest, distill, knowledge, youtube, x, video, transcript]
 ---
 
@@ -9,7 +9,7 @@ tags: [browser, cdp, tabs, harvest, distill, knowledge, youtube, x, video, trans
 Two-tier browser knowledge extraction, read-only on the user's session:
 **tier 0** = every open tab's structured content (pages fully; YouTube tabs as
 video + transcript; X tabs as tweets); **tier 1** = the best links each tab
-points at — watch/status URLs score 12/10, so the next tier is more videos
+points at - watch/status URLs score 12/10, so the next tier is more videos
 and threads, not nav chrome.
 
 ## Prerequisites (once per machine)
@@ -39,7 +39,7 @@ rm -f ~/.config/chromium/SingletonLock
 ```
 
 `--restore-last-session` reopens the user's tabs. YouTube transcripts and X
-tweets both depend on the logged-in context — this is why the skill attaches
+tweets both depend on the logged-in context - this is why the skill attaches
 to the real browser instead of fetching headless.
 
 ## Run
@@ -61,7 +61,7 @@ throwaway tabs for JS-only content (X status pages ALWAYS need it; budget
    views, description, keywords, captionTracks.
 2. Transcript, in order until one succeeds:
    a. **yt-dlp** (`/usr/bin/yt-dlp --skip-download --write-subs
-      --write-auto-subs --sub-langs en.* --sub-format json3/vtt`) — primary
+      --write-auto-subs --sub-langs en.* --sub-format json3/vtt`) - primary
       engine; handles YouTube's empty-timedtext tightening, consent, tokens.
       Parsed from json3 or VTT into ~300-char timestamped paragraphs.
    b. In-page `fetch(baseUrl + '&fmt=json3')` inside the live YouTube tab.
@@ -69,14 +69,14 @@ throwaway tabs for JS-only content (X status pages ALWAYS need it; budget
    d. Throwaway tab: expand description ("...more"), click "Show transcript",
       scrape `ytd-transcript-segment-renderer` (budgeted by --allow-tabs).
 3. Chapters parsed from description timestamps.
-4. Video with no captions at all → `TRANSCRIPT: unavailable (reason)` — never
+4. Video with no captions at all → `TRANSCRIPT: unavailable (reason)` - never
    fabricated. 2-hour ambient videos with zero speech legitimately fail here.
 
 ### X pipeline
 
 Timeline/search/Status tabs: extract up to 40 `article[data-testid="tweet"]`
 (text, author, datetime, engagement aria-label, media, outbound links,
-permalink). Logged-out shells yield zero tweets — flagged in output, not
+permalink). Logged-out shells yield zero tweets - flagged in output, not
 papered over. Tier-1 `status` links always go through a budgeted real tab
 (X static HTML is useless).
 
@@ -84,7 +84,7 @@ papered over. Tier-1 `status` links always go through a budgeted real tab
 
 Every run produces FOUR outputs in the harvest dir:
 `harvest.md` (raw dump), `harvest.json` (sidecar), `graph.json` (nodes/edges),
-`graph.html` (interactive graph — open in any browser, works offline).
+`graph.html` (interactive graph - open in any browser, works offline).
 
 **graph.html design contract (dark observatory, non-negotiable):**
 ink `#0b0e14` canvas + radial vignette; harmonized kind palette (video coral,
@@ -97,7 +97,7 @@ title → link → human-formatted metadata (411.9M views, 0:19, "captured") →
 transcript pull-quote → connection list with verb labels ("by", "mentions");
 kind pills double as legend + filters with counts; header shows formatted
 harvest date, tabular-numeral stats, `/` search focus, Esc closes.
-Motion: staggered fade-in, hover ring growth, neighborhood focus dimming —
+Motion: staggered fade-in, hover ring growth, neighborhood focus dimming -
 all honoring prefers-reduced-motion. No AI tells: no purple-on-purple, no
 neon, no italic mono labels, no raw schema keys in the panel.
 
@@ -109,8 +109,8 @@ neon, no italic mono labels, no raw schema keys in the panel.
    - Threads/tweets: the argument, the numbers, who said it, outbound sources
    - Pages: facts, concepts (one sentence + URL), actionable items, quotes
 3. **Enrich the graph** (this is the interconnection step): append nodes to
-   `graph.json` — `concept` (distilled idea), `action` (ranked todo),
-   `question` (open thread) — and semantic edges to the sources that
+   `graph.json` - `concept` (distilled idea), `action` (ranked todo),
+   `question` (open thread) - and semantic edges to the sources that
    support them (`{"source": "<node-id>", "target": "concept:<slug>",
    "type": "semantic"}`). Then re-render:
    `scripts/graph_builder.py --refresh graph.json`
@@ -127,7 +127,7 @@ neon, no italic mono labels, no raw schema keys in the panel.
 
 - Transcript via in-page fetch fails if captions are disabled on the video;
   static fallback fails on hard bot-walled refetches. Both are reported.
-- X timelines only see loaded DOM — infinite scroll below the fold is missed
+- X timelines only see loaded DOM - infinite scroll below the fold is missed
   unless the user scrolled. Tier-1 tweet tabs are capped by --tab-budget.
 - Tab text capped at 18k chars. Read-only: existing tabs never navigated.
 - YouTube rate-limits rapid caption fetches; keep --max-total sane (~40).
@@ -135,7 +135,7 @@ neon, no italic mono labels, no raw schema keys in the panel.
 ## Troubleshooting
 
 - `connect_over_cdp` refused → port not bound ("Opening in existing browser
-  session" means it never bound — kill all, verify count 0, relaunch).
+  session" means it never bound - kill all, verify count 0, relaunch).
 - Zero tweets extracted → tab is a logged-out shell; reload logged-in or note gap.
 - json3 empty from in-page fetch → captions disabled; try the video in a real
   tab with --allow-tabs (already the tier-1 tweet path), else mark unavailable.

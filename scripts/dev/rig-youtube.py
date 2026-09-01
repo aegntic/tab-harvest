@@ -7,7 +7,7 @@ import tempfile
 from playwright.async_api import async_playwright
 
 TABS = [
-    "https://www.youtube.com/watch?v=jNQXAC9IVRw",  # "Me at the zoo" — first YouTube video, has captions
+    "https://www.youtube.com/watch?v=jNQXAC9IVRw",  # "Me at the zoo" - first YouTube video, has captions
     "https://example.com/",
 ]
 

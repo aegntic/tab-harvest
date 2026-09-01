@@ -1,4 +1,4 @@
-# Tab harvest — 2026-09-01 13:12
+# Tab harvest - 2026-09-01 13:12
 
 - Tabs seen: 2 (extracted: 2, skipped/errored: 0)
 - Tabs with video: 1; with transcripts: 1
@@ -144,23 +144,23 @@ Plan your trip: https://www.moodygardens.com/
 More LIVE Webcams: https://www.moodygardens.com/webcams
 Learn more about the Aquarium Pyramid: https://www.moodygardens.com/attractions/aquarium-pyramid
 
-🐧 Watch our penguins live 24/7 from the Aquarium Pyramid at Moody Gardens in Galveston, Texas. See them swim, waddle, socialize, and explore their habitat anytime, day or night — no ticket required.
+🐧 Watch our penguins live 24/7 from the Aquarium Pyramid at Moody Gardens in Galveston, Texas. See them swim, waddle, socialize, and explore their habitat anytime, day or night - no ticket required.
  
 This penguin livestream offers a behind-the-scenes look at one of the Aquarium Pyramid's most popular exhibits, home to playful, curious penguins known for their strong group dynamics and impressive swimming abilities. You may catch feeding sessions, high-speed swimming bursts, and social interactions throughout the day.
  
-🎥 Tip: Penguin activity varies by time of day and husbandry schedule — check back often for different behaviors.
+🎥 Tip: Penguin activity varies by time of day and husbandry schedule - check back often for different behaviors.
 
-📍 About Moody Gardens — Galveston Island, Texas
-Moody Gardens is a world-class destination featuring educational attractions, family experiences, and seasonal events on Galveston Island. The Aquarium Pyramid showcases marine life from the North Pacific, South Atlantic, South Pacific, and Caribbean — including sharks, rays, reef species, penguins, and more.
+📍 About Moody Gardens - Galveston Island, Texas
+Moody Gardens is a world-class destination featuring educational attractions, family experiences, and seasonal events on Galveston Island. The Aquarium Pyramid showcases marine life from the North Pacific, South Atlantic, South Pacific, and Caribbean - including sharks, rays, reef species, penguins, and more.
  
-🔹 Aquarium Pyramid — marine exhibits, ocean galleries, and animal experiences
-🔹 Rainforest Pyramid — tropical plants and animals in a lush indoor environment
-🔹 Discovery Museum — hands-on science and rotating educational exhibits
-🔹 MG 3D Theater & 4D Special FX Theater — immersive film experiences
-🔹 Moody Gardens Hotel, Spa & Convention Center — resort accommodations on the island
-🔹 Palm Beach (seasonal) — pool, lazy river, and slides
-🔹 Golf Course — championship-level coastal play
-🔹Galveston Island Pickleball at Moody Gardens Golf Course — www.galvestonislandpickleball.com
+🔹 Aquarium Pyramid - marine exhibits, ocean galleries, and animal experiences
+🔹 Rainforest Pyramid - tropical plants and animals in a lush indoor environment
+🔹 Discovery Museum - hands-on science and rotating educational exhibits
+🔹 MG 3D Theater & 4D Special FX Theater - immersive film experiences
+🔹 Moody Gardens Hotel, Spa & Convention Center - resort accommodations on the island
+🔹 Palm Beach (seasonal) - pool, lazy river, and slides
+🔹 Golf Course - championship-level coastal play
+🔹Galveston Island Pickleball at Moody Gardens Golf Course - www.galvestonislandpickleball.com
  
 
 🌊 Support Moody Gardens
@@ -181,7 +181,7 @@ Your views, likes, shares, and subscriptions help support our mission of educati
 - length: 4:59 | views: 3125302
 
 - description (819 chars):
-philosopher's stone but it's a comedy – hey y'all guess who's finally back?! had a lot of fun making this one and decided to adopt a very different, more ytp-esque editing style. let me know what you think!
+philosopher's stone but it's a comedy - hey y'all guess who's finally back?! had a lot of fun making this one and decided to adopt a very different, more ytp-esque editing style. let me know what you think!
 
 and yes, that was probably the longest upload gap of all time but I'm back to stay this time! more regular uploads coming your way:)
 

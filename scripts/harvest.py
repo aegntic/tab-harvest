@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""tab-harvest — dump every open browser tab (tier 0) + best links (tier 1).
+"""tab-harvest - dump every open browser tab (tier 0) + best links (tier 1).
 
 VIDEO-FIRST: YouTube tabs get videoDetails + chapters + full transcript
 (captions fetched inside the logged-in page context). X/Twitter tabs get
@@ -221,7 +221,7 @@ def chapters_from_description(desc: str) -> list[dict]:
         if not m:
             continue
         ts = m.group(1)
-        title = line.replace(ts, "").strip(" -–—•\t")
+        title = line.replace(ts, "").strip(" ---•\t")
         if title:
             out.append({"ts": ts, "title": title[:140]})
     return out[:40]
@@ -335,7 +335,7 @@ def parse_vtt(raw: str) -> list[dict]:
 
 
 def yt_dlp_transcript(url: str) -> tuple[list[dict] | None, str]:
-    """yt-dlp caption extraction — the most robust path (handles tokens/consent)."""
+    """yt-dlp caption extraction - the most reliable path (handles tokens/consent)."""
     import glob
     import os
     import subprocess
@@ -519,7 +519,7 @@ def video_md(v: dict) -> list[str]:
 
 
 def tweets_md(x: dict) -> list[str]:
-    lines = [f"### X feed — {x.get('tweetCount', 0)} loaded tweets (URL: {x.get('url', '')})"]
+    lines = [f"### X feed - {x.get('tweetCount', 0)} loaded tweets (URL: {x.get('url', '')})"]
     for t in x.get("tweets", []):
         lines += ["", f"- **@{t['author']}** ({t['time'] or 'no ts'}) {t['stats']}",
                   f"  {t['text'].replace(chr(10), ' / ')}"]
@@ -530,7 +530,7 @@ def tweets_md(x: dict) -> list[str]:
         if t["href"]:
             lines.append(f"  permalink: {t['href']}")
     if not x.get("tweets"):
-        lines += ["", "- (no tweets extracted — logged-out shell or lazy grid not loaded)"]
+        lines += ["", "- (no tweets extracted - logged-out shell or lazy grid not loaded)"]
     return lines
 
 
@@ -706,7 +706,7 @@ async def main() -> int:
 
     stamp = f"{started:%Y-%m-%d %H:%M}"
     md, js = out_dir / "harvest.md", out_dir / "harvest.json"
-    lines = [f"# Tab harvest — {stamp}", "",
+    lines = [f"# Tab harvest - {stamp}", "",
              f"- Tabs seen: {len(tabs)} (extracted: {sum(1 for t in tabs if t.get('data'))}, "
              f"skipped/errored: {sum(1 for t in tabs if not t.get('data'))})",
              f"- Tabs with video: {sum(1 for t in tabs if t.get('video'))}; with transcripts: "

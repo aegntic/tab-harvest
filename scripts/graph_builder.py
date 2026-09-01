@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""graph_builder — turn a tab-harvest payload into an interactive knowledge graph.
+"""graph_builder - turn a tab-harvest payload into an interactive knowledge graph.
 
 Outputs:
-  graph.json — {meta, nodes, edges} (agent-editable: add concept/action/
+  graph.json - {meta, nodes, edges} (agent-editable: add concept/action/
                question nodes + semantic edges, then --refresh to re-render)
-  graph.html — self-contained interactive graph (vanilla JS, no CDN, offline)
+  graph.html - self-contained interactive graph (vanilla JS, no CDN, offline)
 
 Design: dark observatory language. Ink background, harmonized kind palette,
 curved gradient edges, pre-rendered glow sprites, staggered fade-in,
