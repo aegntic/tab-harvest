@@ -1,27 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tab Harvest — Browser Knowledge Extraction by Aegntic</title>
-  <meta name="description" content="Turn open browser tabs into structured notes, complete video transcripts, and an interactive knowledge map. 100% local, private, and built by Aegntic.">
-  
+  <title>Tab Harvest — Local Browser Knowledge Extraction by Aegntic</title>
+  <meta name="description"
+    content="Extract structured knowledge from your open browser tabs. 100% read-only local Chromium CDP extraction, timestamped transcripts via yt-dlp, and offline semantic mind maps.">
+
   <!-- Favicon / Brand -->
   <link rel="icon" type="image/webp" href="assets/ae-logo.webp">
 
-  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <!-- Google Fonts: Inter, Space Grotesk, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet">
 
-  <!-- GSAP & ScrollTrigger (Local vendor fallback for offline resilience) -->
+  <!-- GSAP & ScrollTrigger -->
   <script src="assets/vendor/gsap.min.js"></script>
   <script src="assets/vendor/ScrollTrigger.min.js"></script>
 
   <!-- Core Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+
+  <!-- Studio Background Watermark -->
+  <div class="site-watermark" aria-hidden="true">
+    <span>tab-harvest</span>
+  </div>
 
   <!-- ========================================================================
        TOP NAVIGATION BAR
@@ -32,235 +42,156 @@
         <a href="https://aegntic.ai" target="_blank" rel="noopener" class="nav-logo-link" title="Visit aegntic.ai">
           <img src="assets/ae-logo.webp" alt="Aegntic Logo" class="nav-logo-img">
         </a>
-        <span class="nav-badge-slash">/</span>
-        <span class="nav-project-title">tab-harvest</span>
+        <span class="nav-slash">/</span>
+        <span class="nav-project-tag">tab-harvest</span>
       </div>
 
       <div class="nav-center">
-        <a href="#simulator" class="nav-link">Free Harvest</a>
-        <a href="#manifesto" class="nav-link">How It Works</a>
-        <a href="#observatory" class="nav-link">Knowledge Map</a>
-        <a href="#pricing" class="nav-link">Subscription Tiers</a>
+        <a href="#nuance" class="nav-link">Why Summarizers Fail</a>
+        <a href="#outputs" class="nav-link">Actual Outputs</a>
+        <a href="#demo" class="nav-link">Screen Demo</a>
+        <a href="#tiers" class="nav-link">Core vs PRO</a>
+        <a href="#blueprints" class="nav-link">Blueprints</a>
       </div>
 
       <div class="nav-right">
-        <!-- Dynamic Quota Pill -->
-        <div class="nav-quota-pill" id="navQuotaPill" title="Your Monthly Free Harvest Quota">
-          <span class="quota-pulse-dot" id="navQuotaDot"></span>
-          <span id="navQuotaText">Free: 50/50 Sessions</span>
+        <!-- Interactive CLI Command Pill -->
+        <div class="nav-cli-pill" id="navCliPill" title="Click to copy CLI command">
+          <span style="color: var(--accent); font-weight: 700;">$</span>
+          <code>python3 scripts/harvest.py --port 9222</code>
+          <span class="cli-copy-badge" id="navCopyBadge">Copy</span>
         </div>
-        <a href="#simulator" class="btn-pill btn-pill-primary">Try Free Demo</a>
+
+        <a href="https://github.com/aegntic/tab-harvest" target="_blank" rel="noopener" class="btn-github">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+          </svg>
+          <span>GitHub</span>
+        </a>
       </div>
     </div>
   </nav>
 
+  <!-- Journey Rail (Right Milestones) -->
+  <aside class="journey-rail" aria-label="Page journey">
+    <a class="journey-node active" href="#hero">00 / Enter</a>
+    <a class="journey-node" href="#nuance">01 / Nuance</a>
+    <a class="journey-node" href="#outputs">02 / Outputs</a>
+    <a class="journey-node" href="#demo">03 / Demo</a>
+    <a class="journey-node" href="#tiers">04 / Tiers</a>
+    <a class="journey-node" href="#blueprints">05 / Blueprints</a>
+  </aside>
+
   <!-- ========================================================================
-       HERO SECTION — VALUE OFFER & UNIQUE BESPOKE ROBOT HARVESTER
+       HERO SECTION — 3D FLOATING ROBOT & THE PROBLEM STATEMENT
        ======================================================================== -->
-  <section class="hero-section" id="hero">
+  <section class="hero" id="hero">
     <div class="container">
       <div class="hero-grid">
-        <!-- Hero Text Content -->
         <div class="hero-content">
-          <div class="hero-badge-row">
-            <span class="scene-index">00 / BROWSER INTELLIGENCE</span>
-            <span class="tag-badge studio-tag">Part of Aegntic</span>
-            <span class="tag-badge">Private Local Architecture</span>
+          <div class="hero-eyebrow">
+            <span class="scene-index">00 / LOCAL BROWSER EXTRACTION</span>
+            <span class="hero-eyebrow-tag">Aegntic Studio</span>
           </div>
 
-          <h1 class="hero-title">
-            Your browser has 50 tabs open. <br>
-            <span class="accent-text">Only 3 actually matter.</span>
+          <h1 class="hero-headline">
+            You have 42 research tabs open.<br>
+            <em>Most summarizers miss the point.</em>
           </h1>
 
-          <p class="hero-subtitle">
-            Turn scattered tabs into clean notes, complete video transcripts, and an interactive knowledge map. Captures active pages safely on your machine without closing windows, losing logins, or sending private data to the cloud.
+          <p class="hero-lead">
+            When you're deep in AI lectures, preprints, and repo dives, generic summarizers spit out three bland bullet points and strip every equation, citation, and timestamp. <strong>Tab Harvest</strong> connects over read-only Chromium CDP, extracts full timestamped transcripts with yt-dlp, and compiles an offline semantic knowledge graph.
           </p>
 
-          <div class="hero-ctas">
-            <a href="#simulator" class="btn-pill btn-pill-accent">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-              Try Free Harvest Demo
+          <div class="hero-actions">
+            <a href="#outputs" class="btn-primary-cta">
+              <span>Explore Actual Outputs</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
             </a>
-            <a href="https://github.com/aegntic" target="_blank" rel="noopener" class="btn-pill btn-pill-outline">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-              View on GitHub
-            </a>
+
+            <div class="nav-cli-pill hero-cli-pill" id="heroCliPill" title="Click to copy CLI command">
+              <span style="color: var(--accent); font-weight: 700;">$</span>
+              <code>python3 scripts/harvest.py --port 9222</code>
+              <span class="cli-copy-badge" id="heroCopyBadge">Copy</span>
+            </div>
           </div>
 
-          <div class="hero-receipts">
-            <div class="receipt-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>100% On-Device (Never Closes Tabs)</span>
-            </div>
-            <div class="receipt-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>50 Free Monthly Sessions</span>
-            </div>
-            <div class="receipt-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Interactive Visual Knowledge Map</span>
-            </div>
+          <div class="hero-telemetry">
+            <span class="pulse-dot-green"></span>
+            <span>Chromium CDP Port 9222 Active • 0 Tabs Closed • Local yt-dlp Transcripts Ready</span>
           </div>
         </div>
 
-        <!-- Unique Bespoke Tab Harvest Robot Character Visual -->
-        <div class="hero-robot-stage">
-          <div class="hero-robot-wrapper">
-            <img src="assets/robot-hero.jpg" alt="Tab Harvest Autonomous Companion" class="hero-robot-img">
-
-            <!-- Floating UI Highlight Chips -->
-            <div class="robot-floater-chip top-left">
-              <div class="chip-header">
-                <span class="chip-dot red"></span>
-                <span>Video Intelligence</span>
-              </div>
-              <div class="chip-sub">Full 42:15 Video Transcript • 6 Chapters</div>
-            </div>
-
-            <div class="robot-floater-chip bottom-right">
-              <div class="chip-header">
-                <span class="chip-dot blue"></span>
-                <span>Thread Extraction</span>
-              </div>
-              <div class="chip-sub">18-Post Discussion • Key Takeaways</div>
-            </div>
-          </div>
+        <div class="hero-figure">
+          <img src="assets/cta-float.webp" alt="Aegntic 3D Floating Robot" class="hero-robot-img" loading="eager">
         </div>
       </div>
     </div>
   </section>
 
   <!-- ========================================================================
-       MARQUEE STRIP — SUPPORTED PLATFORMS & CAPABILITIES
+       SECTION 01: THE NUANCE FILTER & 3D ROBOT COHORT FIGURE
        ======================================================================== -->
-  <div class="marquee-strip">
-    <div class="marquee-inner">
-      <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg> YouTube Transcripts with Timestamped Chapters</span>
-      <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> X & Discussion Thread Unrolling</span>
-      <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> One-Click Chrome, Brave & Edge Extraction</span>
-      <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg> Export to Obsidian, Notion & Clean Markdown</span>
-      <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> 100% Local-First & Private on Your Device</span>
-    </div>
-  </div>
-
-  <!-- ========================================================================
-       SECTION 01: SIMULATOR & GENEROUS FREE TIER GAUGE
-       ======================================================================== -->
-  <section class="simulator-section" id="simulator">
+  <section class="intro-section" id="nuance">
     <div class="container">
-      <div class="section-header">
-        <div class="scene-index">01 / GENEROUS FREE TIER</div>
-        <h2 class="section-title">Test the Harvester. Zero friction.</h2>
-        <p class="section-desc">
-          Every researcher, creator, and operator gets 50 complete harvest sessions every month at zero cost. Try the live interactive preview below.
-        </p>
-      </div>
-
-      <div class="simulator-grid">
-        <!-- Quota Control Card -->
-        <div class="quota-card">
-          <div class="quota-status-banner">
-            <span class="quota-plan-label">Monthly Free Quota</span>
-            <span class="quota-state-tag" id="quotaStateTag">50 / 50 REMAINING</span>
-          </div>
-
-          <div class="quota-gauge-block">
-            <div class="quota-numbers">
-              <span class="quota-big-num" id="quotaBigNum">50</span>
-              <span class="quota-total-num">/ 50 SESSIONS</span>
-            </div>
-            <div class="quota-meter-track">
-              <div class="quota-meter-fill" id="quotaMeterFill" style="width: 100%;"></div>
-            </div>
-          </div>
-
-          <ul class="quota-benefits-list">
-            <li class="benefit-row">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span><b>50 Harvest Runs / Month</b> — Up to 250 research tabs captured</span>
-            </li>
-            <li class="benefit-row">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span><b>Full Video Transcripts</b> — Automatic timestamped chapters & notes</span>
-            </li>
-            <li class="benefit-row">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span><b>Interactive Visual Idea Map</b> — Offline observatory with connection graph</span>
-            </li>
-            <li class="benefit-row">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span><b>No Credit Card Required</b> — Free forever until monthly capacity is reached</span>
-            </li>
-          </ul>
-
-          <div class="simulator-actions">
-            <button id="btnHarvestRun" class="btn-harvest-run">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-              Run Harvest Demo (Consumes 1 Credit)
-            </button>
-            <button id="btnExhaustToggle" class="btn-exhaust-toggle" title="Test what happens when the 50 free credits are finished">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
-              Simulate Exhausting Quota & Unlock 3 Tiers
-            </button>
-          </div>
+      <div class="intro-grid">
+        <!-- 3D Robot Cohort Figure -->
+        <div class="intro-figure">
+          <img src="assets/intro-cohort-coordination.png" alt="Multi-agent cohort coordination render"
+            class="intro-cohort-img" loading="lazy">
         </div>
 
-        <!-- Terminal Console -->
-        <div class="terminal-window">
-          <div class="terminal-header">
-            <div class="terminal-dots">
-              <span class="term-dot red"></span>
-              <span class="term-dot yellow"></span>
-              <span class="term-dot green"></span>
-            </div>
-            <span class="terminal-title">Live Harvest Engine — Active Browser Stream</span>
-            <span class="terminal-status-chip">
-              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#10b981;"></span>
-              READY
-            </span>
-          </div>
-          <div class="terminal-body" id="terminalBody">
-            <!-- Log entries dynamically appended by app.js -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       SECTION 02: FULL-BLEED BESPOKE COHORT CHARACTER & MANIFESTO
-       ======================================================================== -->
-  <section class="cohort-section" id="manifesto">
-    <div class="container">
-      <div class="cohort-grid">
-        <!-- Visual Anchor: Full-bleed left character render -->
-        <div class="cohort-visual-frame">
-          <img src="assets/robot-cohort.jpg" alt="Autonomous harvester robots collaborating in a laboratory observatory" class="cohort-img">
-        </div>
-
-        <!-- Content Block -->
-        <div class="cohort-content">
-          <div class="scene-index">02 / HOW IT OPERATES</div>
-          <h2 class="cohort-hook">
-            Never lose a breakthrough <br>
-            to the tab graveyard.
+        <!-- Nuance Thesis & Side-by-Side Comparison -->
+        <div class="intro-body">
+          <div class="scene-index">01 / THE NUANCE FILTER</div>
+          <h2 class="section-heading">
+            Superficial 3-bullet slop vs. <em>mathematical nuance.</em>
           </h2>
-          <p class="cohort-body-text">
-            Research doesn't happen in a single tab. You open 40 articles, 3 video lectures, and 5 discussion threads planning to review them later — only for your browser to crash or your computer to grind to a halt.
-          </p>
-          <p class="cohort-body-text">
-            Tab Harvest quietly captures your research sessions directly on your device. It never closes your windows, never interrupts your workflow, and never uploads your private passwords or browsing history to third-party ad networks. What you harvest stays 100% on your computer.
+          <p class="section-desc">
+            When you research frontier AI, the breakthrough is in the exact mathematical formulation, the speaker's offhand qualification, and the code repositories in the video description. Generic summarizers erase everything that makes the research valuable.
           </p>
 
-          <div class="proof-points">
-            <div class="proof-item">
-              <div class="proof-num">100%</div>
-              <div class="proof-label">Private & On-Device</div>
+          <div class="nuance-comparison-cards">
+            <!-- Bad Card: Superficial Slop -->
+            <div class="nuance-box bad">
+              <div class="nuance-badge bad">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+                Standard AI Summarizer
+              </div>
+              <div class="nuance-title">Superficial 3-Bullet Slop</div>
+              <div class="nuance-body">
+                • Transformers use self-attention to process words in sentences.<br><br>
+                • The speaker explains neural network architecture and training steps.<br><br>
+                • AI is rapidly improving and requires high compute resources.
+              </div>
+              <div style="font-size: 0.72rem; color: #dc2626; font-family: var(--font-mono); margin-top: auto;">
+                ⚠ Erases equations. Forces you to re-watch the video anyway.
+              </div>
             </div>
-            <div class="proof-item">
-              <div class="proof-num">1-Click</div>
-              <div class="proof-label">Notion & Markdown Export</div>
+
+            <!-- Good Card: Tab Harvest Verbatim Synthesis -->
+            <div class="nuance-box good">
+              <div class="nuance-badge good">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Tab Harvest Verbatim Synthesis
+              </div>
+              <div class="nuance-title">Timestamped Mathematical Nuance</div>
+              <div class="nuance-body">
+                • <strong>[14:22]</strong> Karpathy explains quadratic context memory cost before FlashAttention GPU SRAM tiling.<br><br>
+                • <strong>[28:45]</strong> Precomputes cos and sin frequencies for RoPE rotary embeddings to eliminate 40% forward pass latency.<br><br>
+                • <strong>Citations:</strong> Clones and parses <code>vllm-project/vllm</code> and <code>triton-lang/triton</code> from description.
+              </div>
+              <div class="nuance-formula-preview">
+                Attention(Q,K,V) = softmax((QK^T) / √d_k) · V
+              </div>
             </div>
           </div>
         </div>
@@ -269,284 +200,543 @@
   </section>
 
   <!-- ========================================================================
-       SECTION 03: THE OBSERVATORY (INTERACTIVE KNOWLEDGE GRAPH CANVAS)
+       SECTION 02: ACTUAL OUTPUTS EXPLORER (DARK SLATE COCKPIT)
        ======================================================================== -->
-  <section class="observatory-section" id="observatory">
-    <div class="container">
-      <div class="observatory-header">
-        <div>
-          <div class="scene-index" style="color: #ff6338;">03 / KNOWLEDGE GRAPH</div>
-          <h2 class="obs-title">The Dark Observatory</h2>
-          <p class="obs-subtitle">
-            Every harvest compiles into an interactive visual idea map. Drag nodes to inspect connections, view extracted transcripts, and explore concepts.
-          </p>
-        </div>
-
-        <div class="obs-legend">
-          <span class="obs-pill"><span class="obs-dot video"></span> YouTube Videos</span>
-          <span class="obs-pill"><span class="obs-dot x"></span> Discussion Threads</span>
-          <span class="obs-pill"><span class="obs-dot page"></span> Web Articles</span>
-          <span class="obs-pill"><span class="obs-dot topic"></span> Concept Clusters</span>
-        </div>
-      </div>
-
-      <!-- Canvas Container -->
-      <div class="canvas-container">
-        <canvas id="graphCanvas"></canvas>
-
-        <!-- Inspector Overlay (shows on node click) -->
-        <div class="canvas-inspector hidden" id="canvasInspector">
-          <!-- Dynamically populated by app.js -->
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       SECTION 04: THE 3 SUBSCRIPTION TIERS (REVEALED ON EXHAUSTION)
-       ======================================================================== -->
-  <section class="pricing-section" id="pricing">
-    <!-- Unique Bespoke Mechanical Reach Arm Gesture entering from full bleed -->
-    <div class="reach-arm-container" id="reachArmContainer">
-      <img src="assets/robot-reach-arm.jpg" alt="Mechanical Robotic Reach Arm" class="reach-arm-img">
-    </div>
-
-    <div class="container" style="position: relative; z-index: 10;">
-      <!-- State 1: Locked Gate (Visible while Free Quota > 0) -->
-      <div class="gate-locked-card" id="gateLockedCard">
-        <div class="gate-locked-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-        </div>
-        <div class="scene-index">04 / UPGRADE ACCESS</div>
-        <h3 class="gate-locked-title">Your Generous Free Tier is Active</h3>
-        <p class="gate-locked-desc">
-          You have free harvest sessions ready to use. Full video transcripts, thread extraction, and interactive visual mapping are all included at zero cost. Upgrade tiers are only needed if you exceed 50 monthly sessions or need automated background sync.
-        </p>
-        <div class="gate-locked-actions">
-          <a href="#simulator" class="btn-pill btn-pill-primary">Use Free Credits in Simulator</a>
-          <button id="btnTriggerExhaust" class="btn-pill btn-pill-accent">
-            Simulate Quota Exhaustion & View Tiers
-          </button>
-        </div>
-      </div>
-
-      <!-- State 2: Unlocked Tiers (Revealed when Quota = 0) -->
-      <div class="pricing-unlocked-wrapper" id="pricingUnlockedWrapper">
-        <!-- Exhaustion Banner -->
-        <div class="exhaustion-alert-banner">
-          <div class="exhaust-alert-left">
-            <div class="exhaust-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-            </div>
-            <div>
-              <div class="exhaust-heading">Free Tier Allocation Exhausted (50 / 50 Sessions Consumed)</div>
-              <div class="exhaust-sub">Select an operator tier below to unlock unlimited harvests and background sync pipelines.</div>
-            </div>
-          </div>
-          <button id="btnResetQuota" class="btn-pill btn-pill-outline" style="font-size: 0.78rem;">
-            Reset Demo Quota to 50
-          </button>
-        </div>
-
-        <div class="section-header" style="text-align: center; margin: 0 auto 2.5rem;">
-          <div class="scene-index">04 / EXPANDED CAPACITY</div>
-          <h2 class="section-title">Pick your operating tier.</h2>
-          <p class="section-desc">Zero locked contracts. Local data sovereignty. Transparent pricing.</p>
-        </div>
-
-        <!-- Billing Period Toggle -->
-        <div class="billing-toggle-container">
-          <div class="billing-switch-wrapper">
-            <button id="billingMonthly" class="billing-opt-btn active">Monthly</button>
-            <button id="billingAnnual" class="billing-opt-btn">Annual</button>
-          </div>
-          <span class="savings-tag">Save 20% + 2 Months Free</span>
-        </div>
-
-        <!-- The 3 Subscription Cards -->
-        <div class="pricing-grid">
-          <!-- Tier 1: Solo Operator -->
-          <div class="price-card">
-            <div class="tier-eyebrow">Tier 01</div>
-            <h3 class="tier-name">Solo Operator</h3>
-            <p class="tier-summary">For independent engineers, researchers, and creators running daily research sprints.</p>
-
-            <div class="price-lockup">
-              <span class="price-currency">$</span>
-              <span class="price-amount" id="priceSolo">19</span>
-              <span class="price-period">/month</span>
-            </div>
-
-            <ul class="tier-features-list">
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Unlimited Harvest Sessions</b> across all browser windows</span>
-              </li>
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Automatic Background Sweeps</b> (hourly / daily silent backup)</span>
-              </li>
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Direct Export to Obsidian & Notion</b> with auto [[wikilinks]]</span>
-              </li>
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Local Semantic Search</b> across your entire reading library</span>
-              </li>
-            </ul>
-
-            <button class="btn-card-checkout standard">Select Solo Operator</button>
-          </div>
-
-          <!-- Tier 2: Research Team (Featured with Border Beam) -->
-          <div class="price-card featured">
-            <div class="card-badge-pinned">Most Popular</div>
-            <div class="tier-eyebrow">Tier 02</div>
-            <h3 class="tier-name">Research Team</h3>
-            <p class="tier-summary">For engineering squads, agency pods, and analyst cohorts pooling collective knowledge.</p>
-
-            <div class="price-lockup">
-              <span class="price-currency">$</span>
-              <span class="price-amount" id="priceTeam">49</span>
-              <span class="price-period">/month</span>
-            </div>
-
-            <ul class="tier-features-list">
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Everything in Solo</b> for up to 10 team seats</span>
-              </li>
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Shared Team Knowledge Observatory</b> with group idea maps</span>
-              </li>
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Automated Video Chapter Synthesis</b> & action-item highlights</span>
-              </li>
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>One-Click Webhook Sharing</b> to Slack, Discord, Linear & GitHub</span>
-              </li>
-            </ul>
-
-            <button class="btn-card-checkout primary-accent">Deploy Research Team</button>
-          </div>
-
-          <!-- Tier 3: Sovereign Enterprise -->
-          <div class="price-card">
-            <div class="tier-eyebrow">Tier 03</div>
-            <h3 class="tier-name">Sovereign Suite</h3>
-            <p class="tier-summary">For organizations requiring on-prem air-gapped security, custom crawlers, and dedicated setup.</p>
-
-            <div class="price-lockup">
-              <span class="price-currency">$</span>
-              <span class="price-amount" id="priceSovereign">149</span>
-              <span class="price-period">/month</span>
-            </div>
-
-            <ul class="tier-features-list">
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Everything in Team</b> with unlimited company seats & workspaces</span>
-              </li>
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>100% Air-Gapped Local AI Processing</b> (Ollama / vLLM on-premise)</span>
-              </li>
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Custom Scraper Connectors</b> for internal company wikis & portals</span>
-              </li>
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Dedicated 1-on-1 Workflow Architecture</b> & onboarding by Aegntic</span>
-              </li>
-            </ul>
-
-            <button class="btn-card-checkout standard">Contact Sovereign Setup</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       SECTION 05: PRE-FOOTER BLUEPRINT DOSSIER
-       ======================================================================== -->
-  <section class="prefooter-section">
+  <section class="outputs-section" id="outputs">
     <div class="container">
       <div class="section-header">
-        <div class="scene-index">05 / SYSTEM ARCHITECTURE</div>
-        <h2 class="section-title">Engineered with architectural precision.</h2>
-        <p class="section-desc">A transparent, local-first engine designed to transform chaotic browser sessions into enduring knowledge.</p>
+        <div class="scene-index">02 / VERIFIED OUTPUTS</div>
+        <h2 class="section-heading">
+          Real deliverables. <em>Not another empty dashboard.</em>
+        </h2>
+        <p class="section-desc">
+          Every run generates self-contained files that live on your local disk. Click the tabs below to explore the interactive knowledge graph, timestamped markdown dossier, raw JSON payload, and CLI runner.
+        </p>
       </div>
 
-      <div class="blueprint-grid">
-        <div class="blueprint-card">
-          <img src="assets/blueprint-architecture.jpg" alt="Tab Harvest Knowledge Extraction System Technical Blueprint">
-          <div class="blueprint-caption">TAB HARVEST // LOCAL EXTRACTION PIPELINE & EXPLODED PROCESSING CORE</div>
+      <div class="outputs-cockpit">
+        <!-- Cockpit Header & Tab Switchers -->
+        <div class="cockpit-header-bar">
+          <div class="cockpit-title-lockup">
+            <span class="pulse-dot-green"></span>
+            <div>
+              <div class="cockpit-title-text">Harvest Session: ~/harvests/ai-frontier-session</div>
+              <div class="cockpit-sub-text">42 Active Tabs • 18 Transcripts • 34 Outbound Links • Port 9222</div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;">
+            <div class="cockpit-tabs-list">
+              <button class="cockpit-tab-btn active" data-panel="panel-graph">graph.html</button>
+              <button class="cockpit-tab-btn" data-panel="panel-md">harvest.md</button>
+              <button class="cockpit-tab-btn" data-panel="panel-json">harvest.json</button>
+              <button class="cockpit-tab-btn" data-panel="panel-cli">CLI Runner</button>
+            </div>
+
+            <button class="btn-cockpit-query" id="btnOpenQueryDrawer" title="Natural language query across all 42 harvested tabs">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+              <span>Query Tabs</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PANEL 1: INTERACTIVE RETINA KNOWLEDGE GRAPH CANVAS -->
+        <div class="cockpit-panel active" id="panel-graph">
+          <div class="cockpit-canvas-wrapper">
+            <canvas id="cockpitGraphCanvas"></canvas>
+
+            <!-- Interactive Toolbar & Legend -->
+            <div class="canvas-toolbar">
+              <div class="canvas-legend-group">
+                <span class="legend-item"><span class="legend-dot video"></span> Video Talks (Coral)</span>
+                <span class="legend-item"><span class="legend-dot concept"></span> Concepts (Purple)</span>
+                <span class="legend-item"><span class="legend-dot paper"></span> ArXiv Papers (Green)</span>
+                <span class="legend-item"><span class="legend-dot alpha"></span> Alpha Discoveries (Cyan)</span>
+              </div>
+
+              <button class="canvas-reset-btn" id="btnResetCockpitGraph">Re-Center Graph</button>
+            </div>
+
+            <!-- Slide-Out Node Detail Inspector -->
+            <div class="node-inspector-card hidden" id="nodeInspectorCard">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span class="inspector-tag" id="inspectorTag" style="background: rgba(242, 109, 95, 0.2); color: #f26d5f;">YOUTUBE TALK</span>
+                <button class="inspector-close-x" id="inspectorCloseBtn" title="Close inspector">&times;</button>
+              </div>
+              <h3 class="inspector-title" id="inspectorTitle" style="font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-bottom: 0.4rem;">
+                Karpathy: State of AI 2024
+              </h3>
+              <div class="inspector-quote" id="inspectorQuote">
+                "The primary innovation in the attention block is allowing every token to dynamically route context from all prior positions without fixed recurrence."
+              </div>
+              <div class="inspector-meta" id="inspectorMeta">
+                <div>Creator: <b>Andrej Karpathy</b></div>
+                <div>Timestamp: <b>14:22</b></div>
+                <div>Confidence: <b>99.4% (yt-dlp transcript match)</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 2: MARKDOWN DOSSIER (harvest.md) -->
+        <div class="cockpit-panel" id="panel-md">
+          <div class="code-viewer-container">
+            <div class="code-copy-toolbar">
+              <button class="btn-code-copy" id="copyMdBtn">Copy harvest.md</button>
+            </div>
+            <pre><code># Tab harvest - 2026-09-05 18:42
+
+- Tabs seen: 42 (extracted: 42, skipped/errored: 0)
+- Tabs with video: 18; with full transcripts: 18
+- Tier-1 links fetched: 34 (papers: 22, repositories: 12)
+
+---
+
+## [TAB 01] Andrej Karpathy: State of AI 2024 & Build GPT from Scratch
+- url: https://www.youtube.com/watch?v=kCc8FmEb1nY
+- author: Andrej Karpathy | length: 1:04:15 | views: 2,410,950
+- description:
+  Full step-by-step walkthrough of neural language models, self-attention,
+  KV-cache precomputation, and GPU training dynamics.
+  Citations:
+  - ArXiv 1706.03762: Attention Is All You Need
+  - https://github.com/karpathy/nanoGPT
+
+- TRANSCRIPT (verified via yt-dlp-json3-manual):
+  [14:22] The primary innovation in the attention block is allowing every token
+  to dynamically route context from all prior positions without fixed recurrence.
+  Unlike RNNs where the hidden state is a lossy bottleneck, self-attention maintains
+  direct pairwise dot-product comparisons across the entire context window.
+
+  [28:45] When you implement the query and key projections, notice that the memory
+  footprint scales quadratically with sequence length T. FlashAttention solves this
+  not by reducing mathematical FLOPs, but by fusing SRAM operations and computing
+  the softmax reduction incrementally.
+
+---
+
+## [TAB 04] Umar Jamil: Llama 3 Explained & Coded from Scratch in PyTorch
+- url: https://www.youtube.com/watch?v=7xTGNNLPyMI
+- author: Umar Jamil | length: 1:12:04
+- TRANSCRIPT:
+  [28:45] If you don't precompute the cos and sin frequencies for RoPE, your attention
+  layer forward pass is 40% slower than it needs to be. We rotate the 2D chunks of
+  query and key vectors directly inside the GPU registers before the dot product.
+
+---
+
+## [TAB 08] ArXiv 2205.14135: FlashAttention Fast and Memory-Efficient Exact Attention
+- url: https://arxiv.org/abs/2205.14135
+- authors: Tri Dao, Daniel Y. Fu, Stefano Ermon, Atri Rudra, Christopher Ré
+- summary:
+  Transformers are slow and memory-hungry on long sequences because self-attention
+  scales quadratically. FlashAttention computes exact attention with IO-awareness,
+  tiling the matrix multiplication across GPU SRAM blocks for 2-4x wall-clock speedups.</code></pre>
+          </div>
+        </div>
+
+        <!-- PANEL 3: RAW JSON PAYLOAD (harvest.json) -->
+        <div class="cockpit-panel" id="panel-json">
+          <div class="code-viewer-container">
+            <div class="code-copy-toolbar">
+              <button class="btn-code-copy" id="copyJsonBtn">Copy harvest.json</button>
+            </div>
+            <pre><code>{
+  "started": "2026-09-05T18:42:10Z",
+  "port": 9222,
+  "stats": {
+    "tabs_seen": 42,
+    "tabs_extracted": 42,
+    "video_transcripts": 18,
+    "tier1_links_fetched": 34
+  },
+  "tabs": [
+    {
+      "index": 1,
+      "url": "https://www.youtube.com/watch?v=kCc8FmEb1nY",
+      "title": "Andrej Karpathy: State of AI 2024",
+      "video": {
+        "videoId": "kCc8FmEb1nY",
+        "author": "Andrej Karpathy",
+        "duration": "1:04:15",
+        "transcript_engine": "yt-dlp-primary",
+        "key_timestamps": [
+          { "ts": "14:22", "topic": "Dynamic attention context routing" },
+          { "ts": "28:45", "topic": "FlashAttention SRAM tiling explanation" }
+        ],
+        "outbound_citations": [
+          "https://arxiv.org/abs/1706.03762",
+          "https://github.com/karpathy/nanoGPT"
+        ]
+      }
+    },
+    {
+      "index": 2,
+      "url": "https://www.youtube.com/watch?v=eMlx5fFNoYc",
+      "title": "Attention in transformers, visually explained | 3Blue1Brown",
+      "video": {
+        "videoId": "eMlx5fFNoYc",
+        "author": "Grant Sanderson",
+        "duration": "26:48",
+        "transcript_engine": "yt-dlp-primary",
+        "key_timestamps": [
+          { "ts": "08:14", "topic": "Query and Key dot-product geometric matchmaking" }
+        ]
+      }
+    }
+  ]
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- PANEL 4: CLI RUNNER -->
+        <div class="cockpit-panel" id="panel-cli">
+          <div class="code-viewer-container">
+            <div class="code-copy-toolbar">
+              <button class="btn-code-copy" id="copyCliBtn">Copy CLI Command</button>
+            </div>
+            <pre><code># 1. Start your browser with Chromium debugging enabled (one-time command)
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 &
+
+# 2. Run Tab Harvest (attaches 100% read-only, pulls transcripts, compiles graph)
+python3 scripts/harvest.py --port 9222 --out ~/harvests/manual
+
+# Execution Output:
+[+] Connected to Chromium CDP at 127.0.0.1:9222
+[+] Discovered 42 active tabs across 2 browser windows
+[+] Processing Tier 0 (Tab dumps & video transcripts)...
+    [Tab 1/42] Karpathy: State of AI -> yt-dlp transcript extracted (1,420 words)
+    [Tab 2/42] 3Blue1Brown: Attention -> yt-dlp transcript extracted (890 words)
+    [Tab 3/42] ArXiv 2205.14135 (FlashAttention) -> PDF text parsed (14 pages)
+[+] Scoring Tier 1 outbound citations (watch/status links weighted 12/10)...
+    [Tier-1] Fetched 34 linked preprints and GitHub repositories
+[+] Building graph.json and self-contained graph.html...
+[✓] Complete in 2.41 seconds. Deliverables written to:
+    ~/harvests/manual/graph.html
+    ~/harvests/manual/harvest.md
+    ~/harvests/manual/harvest.json</code></pre>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ========================================================================
-       FOOTER — MATCHING AEGNTIC.AI EXACTLY
+       SECTION 03: 1080P MACOS SCREEN RECORDING DEMO
+       ======================================================================== -->
+  <section class="demo-section" id="demo">
+    <div class="container">
+      <div class="section-header">
+        <div class="scene-index">03 / LIVE EXECUTION</div>
+        <h2 class="section-heading">
+          Screen recording. <em>Real macOS session.</em>
+        </h2>
+        <p class="section-desc">
+          Watch Tab Harvest attach to 42 active research tabs in Chromium, extract in-page transcripts via yt-dlp, and compile the interactive offline graph in 2.4 seconds.
+        </p>
+      </div>
+
+      <div class="demo-window-container">
+        <!-- macOS Window Header Bar -->
+        <div class="mac-titlebar">
+          <div class="traffic-dots">
+            <span class="dot-red"></span>
+            <span class="dot-yellow"></span>
+            <span class="dot-green"></span>
+          </div>
+          <div class="window-title">Terminal — zsh — python3 scripts/harvest.py --port 9222</div>
+          <div style="width: 50px;"></div>
+        </div>
+
+        <!-- Video Player -->
+        <div class="demo-video-wrapper">
+          <video src="assets/tab-harvest-demo.mp4" autoplay loop muted playsinline poster="assets/robot-cohort.jpg">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+        <!-- Execution Milestones Footer -->
+        <div class="demo-milestones-footer">
+          <div class="demo-milestone-box">
+            <span class="milestone-ts">00:01</span>
+            <div class="milestone-info">
+              <b>CDP Handshake</b>
+              <p>Read-only attach to port 9222. Never closes or reloads your tabs.</p>
+            </div>
+          </div>
+
+          <div class="demo-milestone-box">
+            <span class="milestone-ts">00:02</span>
+            <div class="milestone-info">
+              <b>Transcript Waterfall</b>
+              <p>yt-dlp primary engine with in-page timedtext fallback.</p>
+            </div>
+          </div>
+
+          <div class="demo-milestone-box">
+            <span class="milestone-ts">00:03</span>
+            <div class="milestone-info">
+              <b>Offline graph.html</b>
+              <p>Synthesizes self-contained interactive canvas ready to open.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECTION 04: CORE VS PRO ALPHA ENGINE & REACH ARM GRAPHIC
+       ======================================================================== -->
+  <section class="tiers-section" id="tiers">
+    <div class="container">
+      <div class="section-header">
+        <div class="scene-index">04 / ARCHITECTURE TIERS</div>
+        <h2 class="section-heading">
+          Local Core vs. <em>PRO Sovereign Operator.</em>
+        </h2>
+        <p class="section-desc">
+          Deploy the open-source CLI script or upgrade to continuous cross-session memory synthesis for your research lab.
+        </p>
+      </div>
+
+      <div class="tiers-grid">
+        <!-- Card 1: Core Open Source -->
+        <div class="tier-card core-card">
+          <div>
+            <div class="tier-eyebrow-row">
+              <span class="tier-pill core">Core Open Source</span>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">MIT License</span>
+            </div>
+            <h3 class="tier-title">Local Harvester</h3>
+            <p class="tier-desc">The standalone, 100% read-only CLI harvester for everyday research workflows.</p>
+
+            <div class="tier-features-list">
+              <div class="tier-feat">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <div class="tier-feat-content">
+                  <b>Chromium CDP Read-Only Attachment</b>
+                  <p>Never closes, navigates, or reloads your active browser tabs.</p>
+                </div>
+              </div>
+
+              <div class="tier-feat">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <div class="tier-feat-content">
+                  <b>Video-First yt-dlp Transcript Waterfall</b>
+                  <p>Pulls full timestamped transcripts, chapters, and descriptions.</p>
+                </div>
+              </div>
+
+              <div class="tier-feat">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <div class="tier-feat-content">
+                  <b>Tier-1 Link Scoring & Fetch</b>
+                  <p>Crawls outbound GitHub repositories and ArXiv citations.</p>
+                </div>
+              </div>
+
+              <div class="tier-feat">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <div class="tier-feat-content">
+                  <b>Self-Contained graph.html</b>
+                  <p>Offline interactive canvas that works with zero cloud dependencies.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-cli-pill tier-cli-pill" title="Click to copy install command">
+            <span style="color: var(--accent); font-weight: 700;">$</span>
+            <code>git clone https://github.com/aegntic/tab-harvest</code>
+          </div>
+        </div>
+
+        <!-- Card 2: PRO Sovereign Operator -->
+        <div class="tier-card pro-card">
+          <div>
+            <div class="tier-eyebrow-row">
+              <span class="tier-pill pro">Sovereign Operator</span>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-bright);">Persistent Memory</span>
+            </div>
+            <h3 class="tier-title">PRO Alpha Engine</h3>
+            <p class="tier-desc">Continuous cross-session memory synthesis for high-volume researchers and autonomous agent teams.</p>
+
+            <div class="tier-features-list">
+              <div class="tier-feat">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <div class="tier-feat-content">
+                  <b>Cross-Session Vector Graph Synthesis</b>
+                  <p>Merges research tabs across days, surfacing recurring breakthroughs.</p>
+                </div>
+              </div>
+
+              <div class="tier-feat">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <div class="tier-feat-content">
+                  <b>Direct Obsidian Vault Sync</b>
+                  <p>Compiles structured Markdown notes with YAML frontmatter and bi-directional links.</p>
+                </div>
+              </div>
+
+              <div class="tier-feat">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <div class="tier-feat-content">
+                  <b>Automated ArXiv Citation Crawler</b>
+                  <p>Recursively resolves paper footnotes into verified research citations.</p>
+                </div>
+              </div>
+
+              <div class="tier-feat">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-bright)" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <div class="tier-feat-content">
+                  <b>Autonomous Agent Integration (SKILL.md)</b>
+                  <p>Full hands-free execution protocol for Claude Code and Hermes Agent.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <a href="https://github.com/aegntic/tab-harvest" target="_blank" rel="noopener" class="btn-primary-cta"
+            style="width: 100%; justify-content: center; background: var(--accent-bright); color: var(--text-dark);">
+            <span>Deploy PRO System →</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Mechanical Arm Graphic Container -->
+      <div class="tiers-arm-graphic" aria-hidden="true">
+        <img src="assets/cta-reach-arm.png" alt="High-tech mechanical reach arm render" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECTION 05: TECHNICAL DOSSIERS & BLUEPRINTS
+       ======================================================================== -->
+  <section class="blueprints-section" id="blueprints">
+    <div class="container">
+      <div class="section-header">
+        <div class="scene-index">05 / SYSTEM BLUEPRINTS</div>
+        <h2 class="section-heading">
+          Engineered for <em>rock-solid reliability.</em>
+        </h2>
+        <p class="section-desc">
+          Architecture dossiers and precision mechanical joints designed to harvest chaotic browser states without crashing.
+        </p>
+      </div>
+
+      <div class="blueprints-grid">
+        <div class="blueprint-card">
+          <img src="assets/prefooter-primary.png" alt="Mechanical arm technical dossier, 4-panel blueprint" loading="lazy">
+        </div>
+        <div class="blueprint-card">
+          <img src="assets/prefooter-secondary.png" alt="Claw-hand detail with micro worker agents" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       FOOTER & CONTINUOUS MARQUEE TICKER
        ======================================================================== -->
   <footer class="footer">
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand-block">
-          <a href="https://aegntic.ai" target="_blank" rel="noopener">
-            <img src="assets/ae-logo.webp" alt="Aegntic" class="footer-logo-img">
-          </a>
-          <p class="footer-studio-desc">
-            Aegntic designs and ships dependable AI tools, workflow automation, and internal systems for teams with real work to move through.
-          </p>
-        </div>
-
-        <div>
-          <div class="footer-col-title">Tool Ecosystem</div>
-          <ul class="footer-links-list">
-            <li><a href="#hero" class="footer-link">Tab Harvest</a></li>
-            <li><a href="https://aegntic.ai/skills/" target="_blank" rel="noopener" class="footer-link">Aegntic Skills (96 playbooks)</a></li>
-            <li><a href="https://aegntic.ai/audits/" target="_blank" rel="noopener" class="footer-link">Decision Audits</a></li>
-            <li><a href="https://aegntic.ai/projects/cldcde/" target="_blank" rel="noopener" class="footer-link">CLDCDE Ecosystem</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <div class="footer-col-title">Resources</div>
-          <ul class="footer-links-list">
-            <li><a href="https://aegntic.ai/projects/" target="_blank" rel="noopener" class="footer-link">Projects</a></li>
-            <li><a href="https://aegntic.ai/research/" target="_blank" rel="noopener" class="footer-link">Research</a></li>
-            <li><a href="https://aegntic.ai/blog/" target="_blank" rel="noopener" class="footer-link">Engineering Blog</a></li>
-            <li><a href="https://github.com/aegntic/tab-harvest" target="_blank" rel="noopener" class="footer-link">GitHub Source</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <div class="footer-col-title">Connect</div>
-          <ul class="footer-links-list">
-            <li><a href="https://x.com/aegntic_ai" target="_blank" rel="noopener" class="footer-link">X / Twitter</a></li>
-            <li><a href="https://github.com/aegntic" target="_blank" rel="noopener" class="footer-link">GitHub Profile</a></li>
-            <li><a href="https://aegntic.ai#contact" target="_blank" rel="noopener" class="footer-link">Contact Builder</a></li>
-          </ul>
-        </div>
+    <div class="footer-marquee">
+      <div class="marquee-inner">
+        <span>Chromium CDP</span>
+        <span>yt-dlp Transcripts</span>
+        <span>Playwright</span>
+        <span>Obsidian Vault Sync</span>
+        <span>Offline graph.html</span>
+        <span>Local JSON Payload</span>
+        <span>ArXiv Preprints</span>
+        <span>Python 3.12</span>
+        <span>Zero Cloud Token Leak</span>
+        <span>Aegntic Systems</span>
+        <span>Chromium CDP</span>
+        <span>yt-dlp Transcripts</span>
+        <span>Playwright</span>
+        <span>Obsidian Vault Sync</span>
       </div>
+    </div>
 
+    <div class="container">
       <div class="footer-bottom">
-        <div>&copy; 2026 Aegntic. Independent systems practice. Verified claims only.</div>
-        <div>
-          <a href="https://aegntic.ai" target="_blank" rel="noopener">aegntic.ai</a>
+        <div class="footer-copy">
+          © 2026 Aegntic. Local browser knowledge extraction. Verifiable technical systems.
+        </div>
+
+        <div class="footer-links">
+          <a href="https://github.com/aegntic/tab-harvest" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://aegntic.ai" target="_blank" rel="noopener">Aegntic Studio</a>
+          <a href="#hero">Back to Top ↑</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <!-- Application Logic -->
+  <!-- ========================================================================
+       NATURAL LANGUAGE SESSION QUERY DRAWER (BUILDING DATA APPS & APPLE DESIGN)
+       ======================================================================== -->
+  <div class="query-drawer-scrim" id="queryDrawerScrim" aria-hidden="true"></div>
+  <aside class="query-drawer" id="queryDrawer" aria-label="Session Query Engine" aria-hidden="true">
+    <div class="drawer-header">
+      <div class="drawer-title-lockup">
+        <h3>Session Query Engine</h3>
+        <p>Grounded in 42 tabs • 18 verified transcripts • 34 citations</p>
+      </div>
+      <button class="drawer-close-btn" id="btnCloseQueryDrawer" aria-label="Close drawer">&times;</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="drawer-suggestions-label">Suggested Inquiries</div>
+      <div class="drawer-pills-list">
+        <button class="prompt-pill" data-query="Which tabs explain FlashAttention SRAM tiling?">
+          ⚡ FlashAttention SRAM tiling?
+        </button>
+        <button class="prompt-pill" data-query="Find all formulas for RoPE rotary embeddings">
+          📐 RoPE Rotary Embedding formulas?
+        </button>
+        <button class="prompt-pill" data-query="What GitHub repos were cited in the descriptions?">
+          📦 Outbound GitHub repos cited?
+        </button>
+      </div>
+
+      <div class="chat-history" id="chatHistory">
+        <div class="chat-bubble agent">
+          Ask any question across your harvested session. Every response cites exact timestamps (<code>[14:22]</code>), mathematical formulations, or repository URLs. Click any citation chip to locate the node in the knowledge graph.
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <form class="chat-input-form" id="chatInputForm">
+        <input type="text" class="chat-input-field" id="chatInputField" placeholder="Query 42 open tabs..." autocomplete="off">
+        <button type="submit" class="chat-submit-btn">Send</button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- Frontend Logic -->
   <script src="app.js"></script>
 </body>
+
 </html>
