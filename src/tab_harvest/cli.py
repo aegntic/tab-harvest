@@ -113,12 +113,15 @@ def _venv_ytdlp():
 
 
 def cmd_harvest(args: argparse.Namespace) -> int:
+    import asyncio
+
     from . import harvest
-    return harvest.main(argv=[
+    argv = [
         "--port", str(args.port), "--out", args.out,
         "--max-per-tab", str(args.max_per_tab), "--max-total", str(args.max_total),
         "--tab-budget", str(args.tab_budget), "--timeout-ms", str(args.timeout_ms),
-    ] + (["--allow-tabs"] if args.allow_tabs else []))
+    ] + (["--allow-tabs"] if args.allow_tabs else [])
+    return asyncio.run(harvest.main(argv=argv))
 
 
 def cmd_graph(args: argparse.Namespace) -> int:
