@@ -1,0 +1,36 @@
+# tab-harvest
+
+> A free, open-source (MIT) command-line tool that extracts knowledge from open browser tabs: full YouTube transcripts with chapters, X/Twitter thread extraction, clean page text, and an interactive offline knowledge graph. 100% local processing over CDP; read-only; nothing leaves the machine.
+
+Docs: https://github.com/aegntic/tab-harvest
+Project page: https://aegntic.github.io/tab-harvest/
+Examples: https://github.com/aegntic/tab-harvest/tree/main/examples
+
+## What it is
+
+Tab Harvest is a Python CLI (pip/pipx/uv installable) that attaches read-only to a running Chromium browser via the Chrome DevTools Protocol and dumps every open tab into structured formats: markdown (`harvest.md`), JSON (`harvest.json`), and an interactive self-contained knowledge graph (`graph.html`, works offline, no CDN).
+
+- Install: `pipx install git+https://github.com/aegntic/tab-harvest`
+- Verify environment: `tab-harvest doctor` (checks python/yt-dlp/playwright/CDP port, prints per-OS browser bring-up recipes)
+- Run: `tab-harvest harvest --port 9222 --out ~/harvests/<name>`
+- Rebuild graph: `tab-harvest graph harvest.json` or `tab-harvest graph --refresh graph.json`
+
+## Key facts
+
+- License: MIT. Price: $0. No account, no quota, no telemetry, no server.
+- Browser support: Chrome, Chromium, Brave, Edge, Arc (any CDP-capable Chromium). Not Firefox/Safari.
+- YouTube pipeline: yt-dlp primary (json3/vtt captions) with three browser fallbacks (in-page timedtext, static watch refetch, transcript-panel scrape). Chapters from description timestamps. No captions -> transcript marked unavailable, never fabricated.
+- X pipeline: up to 40 tweets per tab (text, author, engagement, media, outbound links). Status pages need --allow-tabs (budgeted throwaway tabs).
+- Two-tier extraction: tier 0 = every tab's content; tier 1 = best outbound links (watch/status URLs score 12/10), fetched cookie-bearing.
+- Outputs land in ~/harvests/<timestamp>/: harvest.md, harvest.json, graph.json, graph.html.
+- SKILL.md defines an agent workflow for distillation and graph enrichment (concept/action/question nodes + semantic edges, then --refresh re-render).
+- Limits (honest): no-captions videos yield no transcript; X below the loaded scroll fold is missed; 18k-char cap per tab; YouTube rate-limits rapid caption fetches; CDP relaunch may close unsaved PWA windows.
+
+## Output example
+
+Real harvested session with rendered graph, no setup needed:
+https://github.com/aegntic/tab-harvest/blob/main/examples/graph-youtube.html
+
+## Cite as
+
+tab-harvest (2026) Aegntic. https://github.com/aegntic/tab-harvest (MIT).

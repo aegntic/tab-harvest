@@ -3,8 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tab Harvest — Browser Knowledge Extraction by Aegntic</title>
-  <meta name="description" content="Turn open browser tabs into structured notes, complete video transcripts, and an interactive knowledge map. 100% local, private, and built by Aegntic.">
+  <title>Tab Harvest — Open-Source Browser Tab Harvester with YouTube Transcripts & Knowledge Graphs</title>
+  <meta name="description" content="Tab Harvest is a free, MIT-licensed CLI that extracts knowledge from your open browser tabs: full YouTube transcripts with chapters, X/Twitter threads, clean page text, and an interactive knowledge graph. 100% local and private — nothing leaves your machine.">
+  <link rel="canonical" href="https://aegntic.github.io/tab-harvest/">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="Mattae Cooper (Aegntic)">
+  <meta name="keywords" content="browser tab extractor, tab manager research, youtube transcript downloader, save open tabs, knowledge graph, x twitter thread archiver, CDP chrome devtools protocol, local-first research tool, markdown export browser, offline knowledge base, yt-dlp transcripts, read-only browser automation">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tab Harvest">
+  <meta property="og:title" content="Tab Harvest — Open-Source Browser Tab Harvester">
+  <meta property="og:description" content="Turn open tabs into structured notes, complete video transcripts, and an interactive knowledge graph. Free, MIT-licensed, 100% local.">
+  <meta property="og:url" content="https://aegntic.github.io/tab-harvest/">
+  <meta property="og:image" content="https://aegntic.github.io/tab-harvest/assets/robot-hero.jpg">
+  <meta property="og:image:alt" content="Tab Harvest robot mascot in a dark observatory of harvested knowledge nodes">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tab Harvest — Open-Source Browser Tab Harvester">
+  <meta name="twitter:description" content="Every open tab, harvested: full YouTube transcripts, X threads, clean markdown, and an interactive knowledge graph. Free and 100% local.">
+  <meta name="twitter:image" content="https://aegntic.github.io/tab-harvest/assets/robot-hero.jpg">
+
+  <!-- JSON-LD: SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Tab Harvest",
+    "applicationCategory": "ResearchTool",
+    "operatingSystem": "macOS, Linux, Windows",
+    "url": "https://aegntic.github.io/tab-harvest/",
+    "downloadUrl": "https://github.com/aegntic/tab-harvest",
+    "softwareVersion": "1.0.0",
+    "datePublished": "2026-09-01",
+    "license": "https://opensource.org/licenses/MIT",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "creator": {
+      "@type": "Organization",
+      "name": "Aegntic",
+      "url": "https://aegntic.ai"
+    },
+    "description": "A free, open-source command-line tool that attaches read-only to your running browser over the Chrome DevTools Protocol and extracts every open tab: structured page content, YouTube videos with complete transcripts and chapters, X/Twitter threads, plus the best links each tab points at. Each run renders an interactive, offline knowledge graph.",
+    "featureList": "YouTube transcript extraction, X/Twitter thread extraction, tier-1 link scoring, interactive knowledge graph, markdown and JSON export, read-only CDP attach, 100% local processing"
+  }
+  </script>
+
+  <!-- JSON-LD: FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is Tab Harvest free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Tab Harvest is open source under the MIT license. There is no account, no subscription, no quota, and no telemetry — it is a CLI you install with pipx or pip and run on your own machine." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Tab Harvest send my browsing data anywhere?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. All extraction happens locally over the Chrome DevTools Protocol. Harvests are written to a folder on your disk as markdown, JSON, and a self-contained HTML knowledge graph that works offline." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can it close or mess up my tabs?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. Tab Harvest attaches read-only and never navigates, reloads, or closes your existing tabs. With --allow-tabs it may open a small budget of new throwaway tabs for JavaScript-only pages, and those are closed afterward." }
+      },
+      {
+        "@type": "Question",
+        "name": "How does it get full YouTube transcripts?",
+        "acceptedAnswer": { "@type": "Answer", "text": "It uses yt-dlp as the primary engine, with three browser-side fallbacks: an in-page timedtext fetch inside the logged-in tab, a static watch-page refetch, and a budgeted real-tab transcript-panel scrape." }
+      },
+      {
+        "@type": "Question",
+        "name": "Which browsers does it support?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Any Chromium-based browser exposing a CDP debugging port: Chrome, Chromium, Brave, Edge, and Arc. Firefox and Safari are not supported because they do not implement the Chrome DevTools Protocol." }
+      }
+    ]
+  }
+  </script>
   
   <!-- Favicon / Brand -->
   <link rel="icon" type="image/webp" href="assets/ae-logo.webp">
@@ -37,19 +116,18 @@
       </div>
 
       <div class="nav-center">
-        <a href="#simulator" class="nav-link">Free Harvest</a>
+        <a href="#simulator" class="nav-link">Live Demo</a>
         <a href="#manifesto" class="nav-link">How It Works</a>
         <a href="#observatory" class="nav-link">Knowledge Map</a>
-        <a href="#pricing" class="nav-link">Subscription Tiers</a>
+        <a href="#pricing" class="nav-link">Install</a>
       </div>
 
       <div class="nav-right">
-        <!-- Dynamic Quota Pill -->
-        <div class="nav-quota-pill" id="navQuotaPill" title="Your Monthly Free Harvest Quota">
+        <div class="nav-quota-pill" id="navQuotaPill" title="Tab Harvest is free and open source under the MIT license">
           <span class="quota-pulse-dot" id="navQuotaDot"></span>
-          <span id="navQuotaText">Free: 50/50 Sessions</span>
+          <span id="navQuotaText">MIT Licensed · 100% Local</span>
         </div>
-        <a href="#simulator" class="btn-pill btn-pill-primary">Try Free Demo</a>
+        <a href="https://github.com/aegntic/tab-harvest" target="_blank" rel="noopener" class="btn-pill btn-pill-primary">Get Started</a>
       </div>
     </div>
   </nav>
@@ -95,7 +173,7 @@
             </div>
             <div class="receipt-item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>50 Free Monthly Sessions</span>
+              <span>Free & Open Source (MIT) — No Account, No Quota</span>
             </div>
             <div class="receipt-item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -138,8 +216,8 @@
     <div class="marquee-inner">
       <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg> YouTube Transcripts with Timestamped Chapters</span>
       <span class="marquee-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> X & Discussion Thread Unrolling</span>
-      <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> One-Click Chrome, Brave & Edge Extraction</span>
-      <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg> Export to Obsidian, Notion & Clean Markdown</span>
+      <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> Chrome, Brave, Edge & Arc via CDP (Read-Only)</span>
+      <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg> Clean Markdown + JSON + Offline HTML Export</span>
       <span class="marquee-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> 100% Local-First & Private on Your Device</span>
     </div>
   </div>
@@ -150,25 +228,25 @@
   <section class="simulator-section" id="simulator">
     <div class="container">
       <div class="section-header">
-        <div class="scene-index">01 / GENEROUS FREE TIER</div>
-        <h2 class="section-title">Test the Harvester. Zero friction.</h2>
+        <div class="scene-index">01 / INSTALL & RUN</div>
+        <h2 class="section-title">Three commands. Zero friction.</h2>
         <p class="section-desc">
-          Every researcher, creator, and operator gets 50 complete harvest sessions every month at zero cost. Try the live interactive preview below.
+          Tab Harvest is a free, open-source CLI (MIT). Install it with pipx, attach it to your running browser, and harvest. No account, no quota, no telemetry.
         </p>
       </div>
 
       <div class="simulator-grid">
-        <!-- Quota Control Card -->
+        <!-- Install / Verify Card -->
         <div class="quota-card">
           <div class="quota-status-banner">
-            <span class="quota-plan-label">Monthly Free Quota</span>
-            <span class="quota-state-tag" id="quotaStateTag">50 / 50 REMAINING</span>
+            <span class="quota-plan-label">Local Install</span>
+            <span class="quota-state-tag" id="quotaStateTag">MIT LICENSED · FREE FOREVER</span>
           </div>
 
           <div class="quota-gauge-block">
             <div class="quota-numbers">
-              <span class="quota-big-num" id="quotaBigNum">50</span>
-              <span class="quota-total-num">/ 50 SESSIONS</span>
+              <span class="quota-big-num" id="quotaBigNum">∞</span>
+              <span class="quota-total-num">/ UNLIMITED LOCAL RUNS</span>
             </div>
             <div class="quota-meter-track">
               <div class="quota-meter-fill" id="quotaMeterFill" style="width: 100%;"></div>
@@ -178,30 +256,30 @@
           <ul class="quota-benefits-list">
             <li class="benefit-row">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span><b>50 Harvest Runs / Month</b> — Up to 250 research tabs captured</span>
+              <span><b>pipx install</b> — <code style="font-family:inherit;font-size:0.92em;background:rgba(255,255,255,.07);padding:.1em .4em;border-radius:4px;">git+https://github.com/aegntic/tab-harvest</code></span>
             </li>
             <li class="benefit-row">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span><b>Full Video Transcripts</b> — Automatic timestamped chapters & notes</span>
+              <span><b>tab-harvest doctor</b> — verifies Python, yt-dlp, playwright, and your CDP port</span>
             </li>
             <li class="benefit-row">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span><b>Interactive Visual Idea Map</b> — Offline observatory with connection graph</span>
+              <span><b>tab-harvest harvest</b> — every open tab → markdown + JSON + knowledge graph</span>
             </li>
             <li class="benefit-row">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span><b>No Credit Card Required</b> — Free forever until monthly capacity is reached</span>
+              <span><b>No account, no servers</b> — output lands in <code style="font-family:inherit;font-size:0.92em;background:rgba(255,255,255,.07);padding:.1em .4em;border-radius:4px;">~/harvests/</code> on your disk</span>
             </li>
           </ul>
 
           <div class="simulator-actions">
             <button id="btnHarvestRun" class="btn-harvest-run">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-              Run Harvest Demo (Consumes 1 Credit)
+              Replay Extraction Demo
             </button>
-            <button id="btnExhaustToggle" class="btn-exhaust-toggle" title="Test what happens when the 50 free credits are finished">
+            <button id="btnExhaustToggle" class="btn-exhaust-toggle" title="Show the exact commands the demo terminal is running">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
-              Simulate Exhausting Quota & Unlock 3 Tiers
+              Show Real Commands
             </button>
           </div>
         </div>
@@ -259,8 +337,8 @@
               <div class="proof-label">Private & On-Device</div>
             </div>
             <div class="proof-item">
-              <div class="proof-num">1-Click</div>
-              <div class="proof-label">Notion & Markdown Export</div>
+              <div class="proof-num">4</div>
+              <div class="proof-label">Output Formats (md, json, graph)</div>
             </div>
           </div>
         </div>
@@ -312,165 +390,154 @@
     </div>
 
     <div class="container" style="position: relative; z-index: 10;">
-      <!-- State 1: Locked Gate (Visible while Free Quota > 0) -->
+      <!-- State 1: Overview (default) -->
       <div class="gate-locked-card" id="gateLockedCard">
         <div class="gate-locked-icon">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
         </div>
-        <div class="scene-index">04 / UPGRADE ACCESS</div>
-        <h3 class="gate-locked-title">Your Generous Free Tier is Active</h3>
+        <div class="scene-index">04 / GET THE TOOL</div>
+        <h3 class="gate-locked-title">One binary truth: it's all free</h3>
         <p class="gate-locked-desc">
-          You have free harvest sessions ready to use. Full video transcripts, thread extraction, and interactive visual mapping are all included at zero cost. Upgrade tiers are only needed if you exceed 50 monthly sessions or need automated background sync.
+          Tab Harvest is MIT-licensed open source. There are no tiers, no seats, no subscriptions, and no upsells —
+          every capability described on this page ships in the free CLI. The cards below are just three ways to install the same tool.
         </p>
         <div class="gate-locked-actions">
-          <a href="#simulator" class="btn-pill btn-pill-primary">Use Free Credits in Simulator</a>
+          <a href="https://github.com/aegntic/tab-harvest#quick-start" target="_blank" rel="noopener" class="btn-pill btn-pill-primary">Read the Docs</a>
           <button id="btnTriggerExhaust" class="btn-pill btn-pill-accent">
-            Simulate Quota Exhaustion & View Tiers
+            Show All Install Options
           </button>
         </div>
       </div>
 
-      <!-- State 2: Unlocked Tiers (Revealed when Quota = 0) -->
+      <!-- State 2: The three install paths -->
       <div class="pricing-unlocked-wrapper" id="pricingUnlockedWrapper">
-        <!-- Exhaustion Banner -->
         <div class="exhaustion-alert-banner">
           <div class="exhaust-alert-left">
             <div class="exhaust-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
             </div>
             <div>
-              <div class="exhaust-heading">Free Tier Allocation Exhausted (50 / 50 Sessions Consumed)</div>
-              <div class="exhaust-sub">Select an operator tier below to unlock unlimited harvests and background sync pipelines.</div>
+              <div class="exhaust-heading">Pick any install path — they're identical (price: $0, license: MIT)</div>
+              <div class="exhaust-sub">All three end with the same <code>tab-harvest</code> command on your PATH. Choose whichever package manager you already use.</div>
             </div>
           </div>
           <button id="btnResetQuota" class="btn-pill btn-pill-outline" style="font-size: 0.78rem;">
-            Reset Demo Quota to 50
+            Back to Overview
           </button>
         </div>
 
         <div class="section-header" style="text-align: center; margin: 0 auto 2.5rem;">
-          <div class="scene-index">04 / EXPANDED CAPACITY</div>
-          <h2 class="section-title">Pick your operating tier.</h2>
-          <p class="section-desc">Zero locked contracts. Local data sovereignty. Transparent pricing.</p>
+          <div class="scene-index">04 / GET THE TOOL</div>
+          <h2 class="section-title">Pick your install path.</h2>
+          <p class="section-desc">Zero locked contracts. Local data sovereignty. And a price that needs no toggle: $0.</p>
         </div>
 
-        <!-- Billing Period Toggle -->
+        <!-- Install Method Hint -->
         <div class="billing-toggle-container">
           <div class="billing-switch-wrapper">
-            <button id="billingMonthly" class="billing-opt-btn active">Monthly</button>
-            <button id="billingAnnual" class="billing-opt-btn">Annual</button>
+            <button id="billingMonthly" class="billing-opt-btn active">pipx</button>
+            <button id="billingAnnual" class="billing-opt-btn">uv</button>
           </div>
-          <span class="savings-tag">Save 20% + 2 Months Free</span>
+          <span class="savings-tag">Same Tool · Same $0 · MIT</span>
         </div>
 
-        <!-- The 3 Subscription Cards -->
+        <!-- The 3 Install Cards -->
         <div class="pricing-grid">
-          <!-- Tier 1: Solo Operator -->
+          <!-- Path 1: pipx -->
           <div class="price-card">
-            <div class="tier-eyebrow">Tier 01</div>
-            <h3 class="tier-name">Solo Operator</h3>
-            <p class="tier-summary">For independent engineers, researchers, and creators running daily research sprints.</p>
+            <div class="tier-eyebrow">PATH 01</div>
+            <h3 class="tier-name">pipx</h3>
+            <p class="tier-summary">Isolated Python environment, command available everywhere, zero dependency conflicts with your other tools.</p>
 
             <div class="price-lockup">
               <span class="price-currency">$</span>
-              <span class="price-amount" id="priceSolo">19</span>
-              <span class="price-period">/month</span>
+              <span class="price-amount" id="priceSolo">0</span>
+              <span class="price-period">/forever</span>
             </div>
 
             <ul class="tier-features-list">
               <li class="tier-feat-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Unlimited Harvest Sessions</b> across all browser windows</span>
+                <span><b>pipx install</b> git+https://github.com/aegntic/tab-harvest</span>
               </li>
               <li class="tier-feat-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Automatic Background Sweeps</b> (hourly / daily silent backup)</span>
+                <span><b>tab-harvest</b> lands on your PATH immediately — <code>doctor</code>, <code>harvest</code>, <code>graph</code> subcommands</span>
               </li>
               <li class="tier-feat-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Direct Export to Obsidian & Notion</b> with auto [[wikilinks]]</span>
-              </li>
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Local Semantic Search</b> across your entire reading library</span>
+                <span><b>playwright install chromium</b> once for the CDP driver</span>
               </li>
             </ul>
 
-            <button class="btn-card-checkout standard">Select Solo Operator</button>
+            <button class="btn-card-checkout standard" data-copy="pipx install git+https://github.com/aegntic/tab-harvest">Copy pipx Command</button>
           </div>
 
-          <!-- Tier 2: Research Team (Featured with Border Beam) -->
+          <!-- Path 2: uv (Featured) -->
           <div class="price-card featured">
-            <div class="card-badge-pinned">Most Popular</div>
-            <div class="tier-eyebrow">Tier 02</div>
-            <h3 class="tier-name">Research Team</h3>
-            <p class="tier-summary">For engineering squads, agency pods, and analyst cohorts pooling collective knowledge.</p>
+            <div class="card-badge-pinned">Fastest</div>
+            <div class="tier-eyebrow">PATH 02</div>
+            <h3 class="tier-name">uv</h3>
+            <p class="tier-summary">Rust-powered resolver: full install — including yt-dlp and playwright — in seconds instead of minutes.</p>
 
             <div class="price-lockup">
               <span class="price-currency">$</span>
-              <span class="price-amount" id="priceTeam">49</span>
-              <span class="price-period">/month</span>
+              <span class="price-amount" id="priceTeam">0</span>
+              <span class="price-period">/forever</span>
             </div>
 
             <ul class="tier-features-list">
               <li class="tier-feat-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Everything in Solo</b> for up to 10 team seats</span>
+                <span><b>uv tool install</b> git+https://github.com/aegntic/tab-harvest</span>
               </li>
               <li class="tier-feat-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Shared Team Knowledge Observatory</b> with group idea maps</span>
+                <span><b>uvx tab-harvest --version</b> — try it without installing at all</span>
               </li>
               <li class="tier-feat-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Automated Video Chapter Synthesis</b> & action-item highlights</span>
-              </li>
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>One-Click Webhook Sharing</b> to Slack, Discord, Linear & GitHub</span>
+                <span><b>Same CLI, faster installs</b> — ideal if you already live in uv</span>
               </li>
             </ul>
 
-            <button class="btn-card-checkout primary-accent">Deploy Research Team</button>
+            <button class="btn-card-checkout primary-accent" data-copy="uv tool install git+https://github.com/aegntic/tab-harvest">Copy uv Command</button>
           </div>
 
-          <!-- Tier 3: Sovereign Enterprise -->
+          <!-- Path 3: Plain venv -->
           <div class="price-card">
-            <div class="tier-eyebrow">Tier 03</div>
-            <h3 class="tier-name">Sovereign Suite</h3>
-            <p class="tier-summary">For organizations requiring on-prem air-gapped security, custom crawlers, and dedicated setup.</p>
+            <div class="tier-eyebrow">PATH 03</div>
+            <h3 class="tier-name">venv + pip</h3>
+            <p class="tier-summary">Plain Python, no extra tooling. The exact flow our GitHub Actions CI runs on every push to main.</p>
 
             <div class="price-lockup">
               <span class="price-currency">$</span>
-              <span class="price-amount" id="priceSovereign">149</span>
-              <span class="price-period">/month</span>
+              <span class="price-amount" id="priceSovereign">0</span>
+              <span class="price-period">/forever</span>
             </div>
 
             <ul class="tier-features-list">
               <li class="tier-feat-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Everything in Team</b> with unlimited company seats & workspaces</span>
+                <span><b>python -m venv .venv</b> then <b>pip install .</b> from a clone</span>
               </li>
               <li class="tier-feat-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>100% Air-Gapped Local AI Processing</b> (Ollama / vLLM on-premise)</span>
+                <span><b>Windows / macOS / Linux</b> — identical commands on all three</span>
               </li>
               <li class="tier-feat-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Custom Scraper Connectors</b> for internal company wikis & portals</span>
-              </li>
-              <li class="tier-feat-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span><b>Dedicated 1-on-1 Workflow Architecture</b> & onboarding by Aegntic</span>
+                <span><b>CI-proven</b> — same venv flow exercised by our smoke tests on every push</span>
               </li>
             </ul>
 
-            <button class="btn-card-checkout standard">Contact Sovereign Setup</button>
+            <button class="btn-card-checkout standard" data-copy="git clone https://github.com/aegntic/tab-harvest && cd tab-harvest && python3 -m venv .venv && .venv/bin/pip install .">Copy venv Setup</button>
           </div>
         </div>
       </div>
     </div>
   </section>
+
 
   <!-- ========================================================================
        SECTION 05: PRE-FOOTER BLUEPRINT DOSSIER

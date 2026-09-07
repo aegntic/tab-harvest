@@ -2,6 +2,12 @@
    AEGNTIC × TAB-HARVEST — DESIGN SYSTEM & CORE STYLES
    ========================================================================== */
 
+/* Suggested install card (package-manager switch highlight) */
+.price-card.suggested {
+  outline: 2px solid rgba(85, 183, 126, 0.55);
+  outline-offset: 4px;
+}
+
 :root {
   /* Aegntic Brand Color Tokens */
   --bg: #f0f6f8;

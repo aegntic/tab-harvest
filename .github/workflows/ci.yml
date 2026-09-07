@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.11", "3.12", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+
+      - name: Smoke tests (CLI, graph builder, doctor)
+        run: python tests/test_smoke.py
+
+      - name: End-to-end harvest against headless rig
+        run: |
+          pip install playwright
+          playwright install chromium --with-deps || playwright install chromium
+          python scripts/dev/rig-basic.py &
+          RIG_PID=$!
+          sleep 10
+          curl -s http://127.0.0.1:9333/json/version | head -c 60; echo
+          tab-harvest harvest --port 9333 --out /tmp/e2e --max-total 2 --timeout-ms 20000
+          kill $RIG_PID || true

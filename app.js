@@ -6,24 +6,13 @@
 (function () {
   'use strict';
 
-  // State
-  const TOTAL_FREE_QUOTA = 50;
-  let currentQuota = parseInt(localStorage.getItem('tab_harvest_quota') ?? TOTAL_FREE_QUOTA, 10);
-  if (isNaN(currentQuota) || currentQuota < 0 || currentQuota > TOTAL_FREE_QUOTA) {
-    currentQuota = TOTAL_FREE_QUOTA;
-  }
-
-  let isAnnual = false;
+  // Tab Harvest is free/MIT — no quota, no accounts. The old SaaS-quota demo
+  // logic is gone; the buttons now reveal install paths and copy commands.
   let isHarvesting = false;
 
   // DOM Elements
-  const quotaBigNum = document.getElementById('quotaBigNum');
-  const quotaMeterFill = document.getElementById('quotaMeterFill');
-  const quotaStateTag = document.getElementById('quotaStateTag');
-  const navQuotaText = document.getElementById('navQuotaText');
-  const navQuotaDot = document.getElementById('navQuotaDot');
   const btnHarvestRun = document.getElementById('btnHarvestRun');
-  const btnExhaustToggle = document.getElementById('btnExhaustToggle');
+  const btnShowInstalls = document.getElementById('btnExhaustToggle');
   const terminalBody = document.getElementById('terminalBody');
   const gateLockedCard = document.getElementById('gateLockedCard');
   const pricingUnlockedWrapper = document.getElementById('pricingUnlockedWrapper');
@@ -34,13 +23,6 @@
   const billingAnnualBtn = document.getElementById('billingAnnual');
   const graphCanvas = document.getElementById('graphCanvas');
   const canvasInspector = document.getElementById('canvasInspector');
-
-  // Pricing values
-  const PRICING_DATA = {
-    solo: { monthly: 19, annual: 15 },
-    team: { monthly: 49, annual: 39 },
-    sovereign: { monthly: 149, annual: 119 }
-  };
 
   // Preset Harvest Scenarios (Clean, user-facing research examples)
   const HARVEST_PRESETS = [
@@ -75,60 +57,8 @@
   ];
 
   /* ------------------------------------------------------------------------
-     QUOTA MANAGEMENT & EXHAUSTION FLOW
+     INSTALL PATH REVEAL + COMMAND COPY
      ------------------------------------------------------------------------ */
-
-  function updateQuotaUI() {
-    const isDepleted = currentQuota <= 0;
-    localStorage.setItem('tab_harvest_quota', currentQuota);
-
-    // Update numbers & meter fill
-    if (quotaBigNum) {
-      quotaBigNum.textContent = currentQuota;
-      quotaBigNum.classList.toggle('depleted', isDepleted);
-    }
-
-    if (quotaMeterFill) {
-      const percentage = (currentQuota / TOTAL_FREE_QUOTA) * 100;
-      quotaMeterFill.style.width = `${percentage}%`;
-      quotaMeterFill.classList.toggle('depleted', isDepleted);
-    }
-
-    if (quotaStateTag) {
-      quotaStateTag.textContent = isDepleted ? '0 / 50 EXHAUSTED' : `${currentQuota} / 50 REMAINING`;
-      quotaStateTag.classList.toggle('depleted', isDepleted);
-    }
-
-    if (navQuotaText) {
-      navQuotaText.textContent = isDepleted ? 'Free Tier Exhausted' : `Free: ${currentQuota}/50 Sessions`;
-    }
-
-    if (navQuotaDot) {
-      navQuotaDot.classList.toggle('depleted', isDepleted);
-    }
-
-    if (btnHarvestRun) {
-      btnHarvestRun.disabled = isDepleted || isHarvesting;
-      if (isDepleted) {
-        btnHarvestRun.innerHTML = `
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
-          Free Tier Quota Depleted
-        `;
-      } else {
-        btnHarvestRun.innerHTML = `
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-          Run Harvest Demo (Consumes 1 Credit)
-        `;
-      }
-    }
-
-    // Toggle between locked gate and 3 subscription tiers
-    if (isDepleted) {
-      showUnlockedTiers();
-    } else {
-      showLockedGate();
-    }
-  }
 
   function showUnlockedTiers() {
     if (gateLockedCard) {
@@ -154,11 +84,9 @@
     }
   }
 
-  function exhaustQuota() {
-    currentQuota = 0;
-    updateQuotaUI();
+  function revealInstalls() {
+    showUnlockedTiers();
 
-    // Smooth scroll down to the unlocked pricing tiers with GSAP
     if (typeof gsap !== 'undefined') {
       gsap.fromTo(
         '.price-card',
@@ -172,18 +100,30 @@
       pricingEl.scrollIntoView({ behavior: 'smooth' });
     }
 
-    logToTerminal('WARN', 'Free tier quota (50/50 sessions) has been completely exhausted.');
-    logToTerminal('INFO', 'Revealing 3 Subscription Tiers: Solo Operator, Research Team, Sovereign Enterprise.');
+    logToTerminal('INFO', 'Three install paths: pipx, uv, or a plain venv. All free, all MIT.');
   }
 
-  function resetQuota() {
-    currentQuota = TOTAL_FREE_QUOTA;
-    updateQuotaUI();
+  function backToOverview() {
+    showLockedGate();
+    const pricingEl = document.getElementById('pricing');
+    if (pricingEl) {
+      pricingEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 
-    logToTerminal('SUCCESS', 'Quota refreshed to 50 free sessions. Free tier active.');
-    const simEl = document.getElementById('simulator');
-    if (simEl) {
-      simEl.scrollIntoView({ behavior: 'smooth' });
+  async function copyCommand(btn) {
+    const cmd = btn.getAttribute('data-copy');
+    if (!cmd) return;
+    try {
+      await navigator.clipboard.writeText(cmd);
+      const original = btn.textContent;
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => { btn.textContent = original; }, 1600);
+    } catch (err) {
+      // Clipboard API unavailable (non-HTTPS, etc.) — fall back to selection hint
+      const original = btn.textContent;
+      btn.textContent = 'Copy blocked — select manually';
+      setTimeout(() => { btn.textContent = original; }, 2000);
     }
   }
 
@@ -218,7 +158,7 @@
   }
 
   async function executeHarvestRun() {
-    if (currentQuota <= 0 || isHarvesting) return;
+    if (isHarvesting) return;
 
     isHarvesting = true;
     btnHarvestRun.disabled = true;
@@ -226,78 +166,55 @@
     // Pick a preset scenario
     const preset = HARVEST_PRESETS[Math.floor(Math.random() * HARVEST_PRESETS.length)];
 
-    logToTerminal('CMD', `Starting on-device harvest sweep across active browser tabs...`);
+    logToTerminal('CMD', `$ tab-harvest harvest --port 9222 --out ~/harvests/demo`);
     await new Promise(r => setTimeout(r, 450));
 
-    logToTerminal('INFO', `Detected active tab: "${preset.name.slice(0, 44)}..."`);
+    logToTerminal('INFO', `Attaching read-only over CDP... detected tab: "${preset.name.slice(0, 44)}..."`);
     await new Promise(r => setTimeout(r, 400));
 
     if (preset.type === 'youtube') {
-      logToTerminal('YT', `Video detected: Indexing timestamped transcript & chapter bookmarks...`);
+      logToTerminal('YT', `yt-dlp engine: pulling timestamped transcript & chapters...`);
       await new Promise(r => setTimeout(r, 550));
-      logToTerminal('SUCCESS', `Extracted complete video transcript (${preset.meta}) into clean notes`);
+      logToTerminal('SUCCESS', `Transcript captured (${preset.meta}) → harvest.md + knowledge graph node`);
     } else if (preset.type === 'x') {
-      logToTerminal('X', `Discussion detected: Unrolling thread posts & extracting key takeaways...`);
+      logToTerminal('X', `Thread detected: unrolling posts & extracting takeaways...`);
       await new Promise(r => setTimeout(r, 500));
-      logToTerminal('SUCCESS', `Saved 18 posts with media into searchable archive`);
+      logToTerminal('SUCCESS', `Thread archived (${preset.meta}) → harvest.md + knowledge graph node`);
     } else {
-      logToTerminal('INFO', `Article detected: Removing ads & extracting clean markdown reader...`);
+      logToTerminal('INFO', `Article detected: extracting clean text, headings & links...`);
       await new Promise(r => setTimeout(r, 450));
-      logToTerminal('SUCCESS', `Extracted clean document body and reference links`);
+      logToTerminal('SUCCESS', `Page body captured → markdown + tier-1 link scoring`);
     }
 
-    logToTerminal('CMD', `Connecting related ideas: Generated 8 semantic concept links`);
+    logToTerminal('CMD', `graph_builder: concept clusters + semantic edges computed locally`);
     await new Promise(r => setTimeout(r, 400));
 
-    logToTerminal('SUCCESS', `✨ Knowledge Map updated: New node added to interactive observatory`);
-
-    // Decrement quota
-    currentQuota--;
-    updateQuotaUI();
+    logToTerminal('SUCCESS', `✨ Knowledge graph updated → graph.html (offline, self-contained)`);
 
     // Add node to interactive canvas
     addNodeToGraph(preset);
 
     isHarvesting = false;
-    if (currentQuota > 0) {
-      btnHarvestRun.disabled = false;
-    }
+    btnHarvestRun.disabled = false;
   }
 
   /* ------------------------------------------------------------------------
-     BILLING TOGGLE (MONTHLY VS ANNUAL)
+     PACKAGE MANAGER SWITCH (picks a suggested path, purely cosmetic)
      ------------------------------------------------------------------------ */
 
   function setBillingPeriod(annual) {
-    isAnnual = annual;
-
     if (billingMonthlyBtn && billingAnnualBtn) {
-      billingMonthlyBtn.classList.toggle('active', !isAnnual);
-      billingAnnualBtn.classList.toggle('active', isAnnual);
+      billingMonthlyBtn.classList.toggle('active', !annual);
+      billingAnnualBtn.classList.toggle('active', annual);
     }
 
-    // Update Tier 1
-    const priceSolo = document.getElementById('priceSolo');
-    if (priceSolo) {
-      priceSolo.textContent = isAnnual ? PRICING_DATA.solo.annual : PRICING_DATA.solo.monthly;
+    // Prices are $0 on every path — nothing to recalculate. The switch just
+    // highlights the corresponding install card.
+    const cards = document.querySelectorAll('.price-card');
+    cards.forEach(el => el.classList.toggle('suggested', false));
+    if (cards[annual ? 1 : 0]) {
+      cards[annual ? 1 : 0].classList.add('suggested');
     }
-
-    // Update Tier 2
-    const priceTeam = document.getElementById('priceTeam');
-    if (priceTeam) {
-      priceTeam.textContent = isAnnual ? PRICING_DATA.team.annual : PRICING_DATA.team.monthly;
-    }
-
-    // Update Tier 3
-    const priceSovereign = document.getElementById('priceSovereign');
-    if (priceSovereign) {
-      priceSovereign.textContent = isAnnual ? PRICING_DATA.sovereign.annual : PRICING_DATA.sovereign.monthly;
-    }
-
-    // Update period labels
-    document.querySelectorAll('.price-period').forEach(el => {
-      el.textContent = isAnnual ? '/month, billed annually' : '/month';
-    });
   }
 
   /* ------------------------------------------------------------------------
@@ -597,24 +514,24 @@
      ------------------------------------------------------------------------ */
 
   function init() {
-    updateQuotaUI();
     initCanvas();
     setupScrollInteractions();
+    showLockedGate();
 
     if (btnHarvestRun) {
       btnHarvestRun.addEventListener('click', executeHarvestRun);
     }
 
-    if (btnExhaustToggle) {
-      btnExhaustToggle.addEventListener('click', exhaustQuota);
+    if (btnShowInstalls) {
+      btnShowInstalls.addEventListener('click', revealInstalls);
     }
 
     if (btnTriggerExhaust) {
-      btnTriggerExhaust.addEventListener('click', exhaustQuota);
+      btnTriggerExhaust.addEventListener('click', revealInstalls);
     }
 
     if (btnResetQuota) {
-      btnResetQuota.addEventListener('click', resetQuota);
+      btnResetQuota.addEventListener('click', backToOverview);
     }
 
     if (billingMonthlyBtn) {
@@ -625,9 +542,14 @@
       billingAnnualBtn.addEventListener('click', () => setBillingPeriod(true));
     }
 
+    // Copy-to-clipboard for every install command button
+    document.querySelectorAll('[data-copy]').forEach(btn => {
+      btn.addEventListener('click', () => copyCommand(btn));
+    });
+
     // Initial terminal log
     logToTerminal('INFO', 'Tab Harvest Engine ready. 100% on-device private processing.');
-    logToTerminal('SUCCESS', `Generous Free Tier active: ${currentQuota}/50 sessions available.`);
+    logToTerminal('SUCCESS', 'Free & open source (MIT). No account, no quota, no telemetry.');
   }
 
   document.addEventListener('DOMContentLoaded', init);

@@ -12,12 +12,19 @@ video + transcript; X tabs as tweets); **tier 1** = the best links each tab
 points at - watch/status URLs score 12/10, so the next tier is more videos
 and threads, not nav chrome.
 
+Tab Harvest is a standalone pip-installable CLI. If `tab-harvest` is not on
+PATH, install it first:
+
+```bash
+pipx install git+https://github.com/aegntic/tab-harvest
+pipx run playwright install chromium   # CDP driver only; never launches the browser
+```
+
 ## Prerequisites (once per machine)
 
 ```bash
-uv venv ~/.hermes/shared/skills/tab-harvest/.venv
-uv pip install --python ~/.hermes/shared/skills/tab-harvest/.venv/bin/python playwright
-~/.hermes/shared/skills/tab-harvest/.venv/bin/playwright install chromium  # driver only
+tab-harvest doctor   # checks python, yt-dlp, playwright + prints OS-specific
+                     # browser bring-up recipes (macOS / Linux / Windows)
 ```
 
 ## Bring-up (user's real browser)
@@ -29,6 +36,8 @@ curl -s http://127.0.0.1:9222/json/version || echo "no CDP"
 ```
 
 If no CDP: warn that relaunching closes their windows/PWAs, then
+`tab-harvest doctor` prints the exact relaunch recipe for their OS. Linux
+reference:
 
 ```bash
 pids=$(pgrep -x chromium) && kill $pids; sleep 2
@@ -45,8 +54,9 @@ to the real browser instead of fetching headless.
 ## Run
 
 ```bash
-SKILL=~/.hermes/shared/skills/tab-harvest
-$SKILL/.venv/bin/python $SKILL/scripts/harvest.py --port 9222 --out ~/harvests/manual
+tab-harvest harvest --port 9222 --out ~/harvests/manual
+# fallback if the console script is missing:
+python -m tab_harvest harvest --port 9222 --out ~/harvests/manual
 ```
 
 Flags: `--max-per-tab N` (4), `--max-total N` (24), `--allow-tabs` opens
@@ -113,7 +123,7 @@ neon, no italic mono labels, no raw schema keys in the panel.
    `question` (open thread) - and semantic edges to the sources that
    support them (`{"source": "<node-id>", "target": "concept:<slug>",
    "type": "semantic"}`). Then re-render:
-   `scripts/graph_builder.py --refresh graph.json`
+   `tab-harvest graph --refresh graph.json`
    Open graph.html: concepts cluster the sources they came from; topics
    bridge videos/tweets/pages sharing vocabulary; channels/authors group
    their work; links_to shows the discovery path you took.
