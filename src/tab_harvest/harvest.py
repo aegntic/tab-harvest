@@ -338,11 +338,22 @@ def yt_dlp_transcript(url: str) -> tuple[list[dict] | None, str]:
     """yt-dlp caption extraction - the most reliable path (handles tokens/consent)."""
     import glob
     import os
+    import shutil
+    import shlex
     import subprocess
+    import sysconfig
     import tempfile
 
+    exe = shutil.which("yt-dlp")
+    if exe is None:  # also look inside the active venv (pip-installed yt-dlp)
+        _bin = Path(sysconfig.get_path("purelib")) / "yt-dlp" / "__main__.py"
+        if _bin.exists():
+            exe = f"{sys.executable} {_bin}"
+    if exe is None:
+        return None, "ytdlp-missing"
+
     with tempfile.TemporaryDirectory(prefix="tabharvest-ytdlp-") as td:
-        cmd = ["/usr/bin/yt-dlp", "--skip-download", "--write-subs", "--write-auto-subs",
+        cmd = [*shlex.split(exe), "--skip-download", "--write-subs", "--write-auto-subs",
                "--sub-langs", "en.*,en", "--sub-format", "json3/vtt",
                "-o", os.path.join(td, "%(id)s"), url]
         try:
@@ -534,7 +545,7 @@ def tweets_md(x: dict) -> list[str]:
     return lines
 
 
-async def main() -> int:
+async def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=9222)
     ap.add_argument("--out", default=None)
@@ -544,7 +555,7 @@ async def main() -> int:
                     help="open real tabs for JS-rendered tier-1 pages (budget: --tab-budget)")
     ap.add_argument("--tab-budget", type=int, default=6)
     ap.add_argument("--timeout-ms", type=int, default=15000)
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
 
     from playwright.async_api import async_playwright
 

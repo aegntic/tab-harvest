@@ -652,13 +652,13 @@ def render_html(graph: dict) -> str:
                         f"<title>Knowledge Graph {meta_title}</title>", 1)
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("harvest", help="harvest.json (or graph.json with --refresh)")
     ap.add_argument("--refresh", action="store_true", help="input is an enriched graph.json; re-render only")
     ap.add_argument("--out", default=None, help="output dir (default: beside input)")
     ap.add_argument("--html", default=None, help="explicit html output path (refresh mode)")
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
 
     src = Path(args.harvest)
     out_dir = Path(args.out) if args.out else src.parent

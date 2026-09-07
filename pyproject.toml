@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tab-harvest"
+version = "1.0.0"
+description = "Two-tier, read-only browser knowledge extraction: every open tab dumped structured, YouTube videos with complete transcripts, X/Twitter threads, and an interactive knowledge graph — 100% local."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [{ name = "Mattae Cooper", email = "mattae@aegntic.com" }]
+keywords = [
+    "browser", "tabs", "cdp", "chrome-devtools-protocol", "playwright",
+    "youtube-transcript", "yt-dlp", "knowledge-graph", "web-scraping",
+    "twitter", "x", "research", "second-brain", "local-first", "privacy",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP :: Browsers",
+    "Topic :: Text Processing :: Markup",
+    "Topic :: Utilities",
+]
+
+dependencies = [
+    "playwright>=1.40",
+    "yt-dlp>=2024.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/aegntic/tab-harvest"
+Repository = "https://github.com/aegntic/tab-harvest"
+Documentation = "https://github.com/aegntic/tab-harvest#readme"
+Issues = "https://github.com/aegntic/tab-harvest/issues"
+Changelog = "https://github.com/aegntic/tab-harvest/releases"
+
+[project.scripts]
+tab-harvest = "tab_harvest.cli:main"
+
+[tool.hatchling.build.targets.wheel]
+# examples/, assets/, scripts/dev/, docs/ stay out of the wheel; README + LICENSE ride along
+packages = ["src/tab_harvest"]
