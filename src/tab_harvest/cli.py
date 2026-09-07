@@ -69,26 +69,24 @@ def cmd_doctor(args: argparse.Namespace) -> int:
         return 0
     sysname = platform.system()
     print("  bring-up recipes:")
-    if sysname == "Darwin":
-        print(f"""  macOS (Chrome):
+    print(f"""  macOS (Chrome):
     # Chrome must be fully quit first (Cmd+Q, check with: pgrep -x "Google Chrome")
     open -a "Google Chrome" --args --remote-debugging-port={args.port} --restore-last-session
     # or, explicit binary:
     "/Applications/Google Chrome.app/Contents/MACOS/Google Chrome" \\
       --remote-debugging-port={args.port} --user-data-dir="$HOME/Library/Application Support/Google/Chrome" \\
       --restore-last-session about:blank""")
-    elif sysname == "Windows":
-        print(f"""  Windows (Chrome/Edge):
+    print(f"""  Windows (Chrome/Edge):
     :: Chrome must be fully quit first (check: tasklist | findstr chrome.exe)
     "%ProgramFiles%\\Google\\Chrome\\Application\\chrome.exe" ^
       --remote-debugging-port={args.port} --restore-last-session about:blank""")
-    else:
-        print(f"""  Linux (Chromium):
+    print(f"""  Linux (Chromium):
     pids=$(pgrep -x chromium || pgrep -x chrome) && kill $pids; sleep 2
     rm -f ~/.config/chromium/SingletonLock
     /usr/lib/chromium/chromium --remote-debugging-port={args.port} \\
       --user-data-dir=$HOME/.config/chromium --password-store=gnome-libsecret \\
-      --no-first-run --restore-last-session about:blank""")
+      --no-first-run --restore-last-session about:blank
+  (this host: {sysname})""")
     print(f"""
   verify:  curl -s http://127.0.0.1:{args.port}/json/version
 
