@@ -47,7 +47,7 @@ server.tool(
     description:
       "Describe this server: what it hosts, what runs locally vs in the cloud",
     inputSchema: z.object({}),
-    annotations: { readOnlyHint: true, destructiveHint: false },
+    annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
   },
   async () => {
     const info = {
