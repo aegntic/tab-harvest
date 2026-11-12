@@ -79,6 +79,15 @@ server.tool(
         .string()
         .default("en")
         .describe("Subtitle language code, e.g. en, de, es"),
+      max_chars: z
+        .number()
+        .int()
+        .min(200)
+        .max(60_000)
+        .default(20_000)
+        .describe(
+          "Cap on returned transcript length; lower this when you only need an excerpt"
+        ),
     }),
     outputSchema: z.object({
       url: z.string(),
@@ -88,7 +97,7 @@ server.tool(
     }),
     annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
   },
-  async ({ url, language }) => {
+  async ({ url, language, max_chars }) => {
     const videoId = extractVideoId(url);
     const cues = await YoutubeTranscript.fetchTranscript(videoId, language);
     if (!cues || cues.length === 0) {
@@ -101,7 +110,7 @@ server.tool(
       .join(" ")
       .replace(/\s+/g, " ")
       .trim()
-      .slice(0, MAX_TEXT);
+      .slice(0, max_chars);
     const result = {
       url: `https://youtu.be/${videoId}`,
       language,
