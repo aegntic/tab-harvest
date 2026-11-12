@@ -7,3 +7,8 @@ aegntic.html
 aegntic_styles.css
 process_img.py
 scratch_view_demo.html
+
+# mcp-use server build artifacts
+mcp-server/node_modules/
+mcp-server/dist/
+mcp-server/.mcp-use/

@@ -1,0 +1,25 @@
+{
+  "name": "tab-harvest-mcp",
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "version": "1.0.0",
+  "description": "MCP server exposing tab-harvest cloud-viable tools: YouTube transcripts and metadata via yt-dlp",
+  "author": "aegntic",
+  "license": "MIT",
+  "scripts": {
+    "build": "mcp-use build",
+    "dev": "mcp-use dev",
+    "start": "mcp-use start",
+    "deploy": "mcp-use deploy"
+  },
+  "dependencies": {
+    "mcp-use": "^2.0.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.0",
+    "@types/node": "^22.0.0"
+  }
+}
