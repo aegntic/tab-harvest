@@ -43,10 +43,11 @@ function mcpResult(obj: unknown) {
 server.tool(
   {
     name: "server-info",
+    title: "Server info",
     description:
       "Describe this server: what it hosts, what runs locally vs in the cloud",
     inputSchema: z.object({}),
-    annotations: { readOnlyHint: true },
+    annotations: { readOnlyHint: true, destructiveHint: false },
   },
   async () => {
     const info = {
@@ -69,6 +70,7 @@ server.tool(
 server.tool(
   {
     name: "get-youtube-transcript",
+    title: "Get YouTube transcript",
     description:
       "Fetch the spoken-content transcript of a YouTube video (auto-generated or manual subtitles) as plain text",
     inputSchema: z.object({
@@ -84,7 +86,7 @@ server.tool(
       chars: z.number(),
       transcript: z.string(),
     }),
-    annotations: { readOnlyHint: true, openWorldHint: true },
+    annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
   },
   async ({ url, language }) => {
     const videoId = extractVideoId(url);
@@ -113,6 +115,7 @@ server.tool(
 server.tool(
   {
     name: "get-video-metadata",
+    title: "Get video metadata",
     description:
       "Fetch YouTube video metadata: title, channel, duration, views and description",
     inputSchema: z.object({
@@ -125,7 +128,7 @@ server.tool(
       views: z.number().nullable(),
       description: z.string(),
     }),
-    annotations: { readOnlyHint: true, openWorldHint: true },
+    annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
   },
   async ({ url }) => {
     const videoId = extractVideoId(url);
@@ -162,6 +165,7 @@ function mapVideo(v: any) {
 server.tool(
   {
     name: "search-youtube",
+    title: "Search YouTube",
     description:
       "Search YouTube for videos matching a query, with view counts and durations",
     inputSchema: z.object({
@@ -174,7 +178,7 @@ server.tool(
         .default(10)
         .describe("Max results to return"),
     }),
-    annotations: { readOnlyHint: true, openWorldHint: true },
+    annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
   },
   async ({ query, limit }) => {
     const yt = await Innertube.create();
@@ -188,6 +192,7 @@ server.tool(
 server.tool(
   {
     name: "get-channel-videos",
+    title: "Get channel videos",
     description:
       "List the latest videos from a YouTube channel (handle like @mkbhd or channel URL)",
     inputSchema: z.object({
@@ -202,7 +207,7 @@ server.tool(
         .default(10)
         .describe("Max results to return"),
     }),
-    annotations: { readOnlyHint: true, openWorldHint: true },
+    annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
   },
   async ({ channel, limit }) => {
     const yt = await Innertube.create();
@@ -263,6 +268,7 @@ async function fetchTweetViaOembed(id: string) {
 server.tool(
   {
     name: "get-tweet",
+    title: "Get tweet",
     description:
       "Fetch a public tweet or the first post of a thread: author, text, timestamp, likes, photos. Works for public tweets only (no login-walled content).",
     inputSchema: z.object({
@@ -270,7 +276,7 @@ server.tool(
         .string()
         .describe("Tweet URL (x.com or twitter.com .../status/<id>) or raw id"),
     }),
-    annotations: { readOnlyHint: true, openWorldHint: true },
+    annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
   },
   async ({ url }) => {
     const id = extractTweetId(url);
