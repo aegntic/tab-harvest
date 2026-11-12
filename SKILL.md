@@ -133,6 +133,72 @@ neon, no italic mono labels, no raw schema keys in the panel.
    nodes/edges), 10 highlights, output paths (including graph.html), and
    extraction gaps stated honestly.
 
+- Silencing tabs: this Chromium build's CDP has NO `Page.setAudioMuted`
+  ("wasn't found"). What works: `page.evaluate` a snippet that pauses every
+  `video,audio` where `!m.paused && !m.ended` — verified to stop all audio.
+- Reopening a run's graph.html via CDP: match the EXACT `file://<run-dir>/graph.html`
+  URL. `url.endswith("graph.html")` grabs older runs' still-open graph tabs and
+  you screenshot/reload the wrong one (bit the 2026-10-27 run).
+- Curated maps beat force graphs for legibility: 94-node force layout read as a
+  hairball; a hand-placed SVG (5 themes × 3-5 concepts, source-number tags,
+  legend table) read at a glance. Generate with fixed coordinates, then verify
+  by screenshot + vision pass and hand-place colliding pills.
+
+## Fleet notes (verified 2026-10-27 run, window-scoped)
+
+- To harvest ONE window only (e.g. a dedicated "tabs2harvest" video queue) without
+  dumping PII tabs (Gmail/Stripe/LinkedIn) to disk: the CLI always harvests every
+  tab — instead attach with playwright, map pages via CDP
+  `Browser.getWindowForTarget`, and run a scoped driver that imports this package's
+  own functions (TIER0_JS, parse_watch_html, yt_dlp_transcript, yt_transcript_static,
+  transcript_via_new_tab, chapters_from_description). Write harvest.json/harvest.md
+  in the standard shape, then graph_builder.py <json> --out <dir> still works.
+- Dedupe repeated video tabs by videoId before transcript pulls — a video open in 6
+  tabs must cost one yt-dlp call, not six.
+- Pitfall: a script-level `BUDGET = 3` decremented inside a function raises
+  UnboundLocalError in Python (implicit local). Use `budget = [3]` and `budget[0] -= 1`.
+- Chromium relaunch on Omarchy (verified twice): graceful `kill <main-pid>`, wait for
+  proc count 0, `rm -f ~/.config/chromium/SingletonLock`, then
+  `systemd-run --user /usr/lib/chromium/chromium --remote-debugging-port=9222
+  --user-data-dir=~/.config/chromium --password-store=gnome-libsecret --no-first-run
+  --restore-last-session about:blank` — CDP binds within ~2s and all windows/tabs
+  restore (PWA app windows do not; separate-profile apps like ChatGPT are untouched).
+
+- Driving NotebookLM ("Gemini Notebook" — notebook.google.com; notebooklm.google.com
+  redirects there) over CDP works end to end: New notebook → `[aria-label="Add source"]`
+  → "Upload files" tile → input[type=file] mounts; set_input_files ONE file per call in
+  a loop (dialog closes after the first). Rename: click the title heading, fill the input
+  that already holds the old title, Enter. TRAP: the "Discover sources" query box is the
+  first visible empty input on the page — a blind fill+Enter submits a web-discovery
+  query (results land as an unimported card, not as sources). Deleting a source: row
+  More menu → "Remove source" → scoped `[role=dialog]` Delete confirm; re-locate buttons
+  after every click (handles go stale on re-render). NotebookLM auto-titles from the
+  first source's content and auto-writes a briefing into chat on upload.
+
+- Self-adding knowledge bank: after every harvest, run the ingest contract in
+  aegntic/intel-distillations (bank/SCHEMA.md): `python3 bank.py ingest <dir>`,
+  write the synthesis draft (fNN citation map, `### update:` concept blocks,
+  candidate-moves JSON), apply accepted blocks to wiki/, refresh HOT.md,
+  `python3 bank.py verify` must PASS, commit `bank: ingest <date>`, push.
+  github-d's weekly cron runs bank/sweep.sh to catch un-ingested ~/harvests dirs.
+
+## Fleet notes (verified 2026-10-23 run)
+
+- Skill name collides across external_dirs (shared + cldcde-private vault copy);
+  `skill_view` refuses the bare name — read the shared SKILL.md from disk instead.
+- CLI not on PATH (no pipx here) but the shared skill's `.venv` has the package
+  installed: run everything via
+  `~/.hermes/shared/skills/tab-harvest/.venv/bin/python -m tab_harvest <cmd>`
+  (works for `doctor`, `harvest`, and `graph --refresh graph.json` re-render).
+- Omarchy relaunch: `systemd-run --user /usr/bin/chromium --remote-debugging-port=9222
+  --user-data-dir=~/.config/chromium ... --restore-last-session about:blank` inherits
+  the Wayland session env; CDP bound within ~2s.
+- Parallel distiller subagents on zai can HTTP 429 mid-batch; a child that dies after
+  its write_file calls has still produced valid output — verify files on disk and
+  re-dispatch only the gaps, don't redo the whole batch.
+- Transcripts occasionally appear duplicated within a tab's range (harmless; distill
+  from the first pass).
+
 ## Limits
 
 - Transcript via in-page fetch fails if captions are disabled on the video;
