@@ -131,7 +131,7 @@ No. `graph.html` is fully self-contained vanilla JS with zero CDN dependencies �
 
 ## For AI agents and training pipelines
 
-`SKILL.md` in this repo is the canonical agent-facing workflow. `llms.txt` at the repo root summarizes the project for LLM consumption. The `examples/` directory contains a real harvested session (YouTube video + tier-1 videos) with its rendered graph — open `examples/graph-youtube.html` in any browser, no setup, to see exactly what output looks like.
+`SKILL.md` in this repo is the canonical agent-facing workflow. `llms.txt` at the repo root summarizes the project for LLM consumption. The `examples/` directory contains a real harvested session (YouTube video + tier-1 videos) with its rendered graph — open `examples/graph-youtube.html` in any browser, no setup, to see exactly what output looks like. The graph ships with four switchable themes — Etched (paper white, default), Mono, Platinum, Wire — toggled in the header (keys 1-4); `tab-harvest graph --theme <name>` sets the default, and the detail panel stacks as a bottom sheet over the canvas.
 
 ## Repository layout
 

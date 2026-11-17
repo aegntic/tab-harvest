@@ -1,0 +1,282 @@
+{
+ "meta": "2026-09-01 13:12",
+ "nodes": [
+  {
+   "id": "tab:0",
+   "kind": "page",
+   "label": "Example Domain",
+   "url": "https://example.com/",
+   "meta": {}
+  },
+  {
+   "id": "tab:jNQXAC9IVRw",
+   "kind": "video",
+   "label": "Me at the zoo",
+   "url": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+   "meta": {
+    "channel": "jawed",
+    "views": 411920053,
+    "length": 19,
+    "transcript_src": "ytdlp-json3-manual",
+    "transcript_paras": 1,
+    "transcript_head": "All right, so here we are, in front of the elephants the cool thing about these guys is that they have really... really really long trunks and that's cool (baaaaaaaaaaahhh!!) and that's pretty much all there is to say"
+   }
+  },
+  {
+   "id": "chan:jawed",
+   "kind": "channel",
+   "label": "jawed",
+   "url": "https://www.youtube.com/@jawed",
+   "meta": {}
+  },
+  {
+   "id": "tab:jNQXAC9IVRw",
+   "kind": "video",
+   "label": "Me at the zoo",
+   "url": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+   "meta": {
+    "channel": "jawed",
+    "views": 411920053,
+    "length": 19,
+    "transcript_src": "ytdlp-json3-manual",
+    "transcript_paras": 1,
+    "transcript_head": "All right, so here we are, in front of the elephants the cool thing about these guys is that they have really... really really long trunks and that's cool (baaaaaaaaaaahhh!!) and that's pretty much all there is to say"
+   }
+  },
+  {
+   "id": "t1:https://iana.org/domains/example",
+   "kind": "page",
+   "label": "Example Domains",
+   "url": "https://iana.org/domains/example",
+   "meta": {
+    "fetch": "api",
+    "snippet": "Example Domains Instructions and Guides As described in RFC 2606 and RFC 6761, a number of domains such as example.com and example.org are maintained for documentation purposes. These domains may be used as illustrative examples in documents without prior coordination with us. They are not available for registration or"
+   }
+  },
+  {
+   "id": "t1:jNQXAC9IVRw",
+   "kind": "video",
+   "label": "Me at the zoo ↗ linked",
+   "url": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+   "meta": {
+    "channel": "jawed",
+    "views": "411920053",
+    "length": 19,
+    "transcript_src": "ytdlp-json3-manual",
+    "transcript_paras": 1,
+    "transcript_head": "All right, so here we are, in front of the elephants the cool thing about these guys is that they have really... really really long trunks and that's cool (baaaaaaaaaaahhh!!) and that's pretty much all there is to say",
+    "twin": true
+   }
+  },
+  {
+   "id": "t1:HHp4rjhJsWI",
+   "kind": "video",
+   "label": "Moody Gardens Penguin Cam LIVE | Penguin Habitat Stream at the Aquarium in Galveston, Texas",
+   "url": "https://www.youtube.com/watch?v=HHp4rjhJsWI",
+   "meta": {
+    "channel": "Moody Gardens",
+    "views": "8435600",
+    "length": 0,
+    "transcript_src": "tab-no-transcript",
+    "transcript_paras": 0
+   }
+  },
+  {
+   "id": "chan:Moody Gardens",
+   "kind": "channel",
+   "label": "Moody Gardens",
+   "url": "https://www.youtube.com/@MoodyGardens",
+   "meta": {}
+  },
+  {
+   "id": "t1:PU-iJqVSohw",
+   "kind": "video",
+   "label": "harry potter but it's a comedy",
+   "url": "https://www.youtube.com/watch?v=PU-iJqVSohw",
+   "meta": {
+    "channel": "Siriusly",
+    "views": "3125302",
+    "length": 299,
+    "transcript_src": "ytdlp-json3-manual",
+    "transcript_paras": 5,
+    "transcript_head": "ah Professor I would trust Hagrid with my life [Applause] dry up dursley you great oh I'm I'm not Harry I hey it's an outrage it's a scandal get out of my house I can't tell you how pleased I am to meet you hello Professor I didn't see you there oh nice to meet you perhaps this no no definitely not no matter I wonder"
+   }
+  },
+  {
+   "id": "chan:Siriusly",
+   "kind": "channel",
+   "label": "Siriusly",
+   "url": "https://www.youtube.com/@Siriusly",
+   "meta": {}
+  },
+  {
+   "id": "t1:h4rZt2vNyEg",
+   "kind": "video",
+   "label": "Pablo Picasso Style Cubism Painting For Your Tv Modern Art Screensaver Wallpaper Fine Art Background",
+   "url": "https://www.youtube.com/watch?v=h4rZt2vNyEg",
+   "meta": {
+    "channel": "So Arty!",
+    "views": "25828",
+    "length": 7200,
+    "transcript_src": "tab-no-transcript",
+    "transcript_paras": 0
+   }
+  },
+  {
+   "id": "chan:So Arty!",
+   "kind": "channel",
+   "label": "So Arty!",
+   "url": "https://www.youtube.com/@SoArty!",
+   "meta": {}
+  },
+  {
+   "id": "topic:zoo",
+   "kind": "topic",
+   "label": "zoo",
+   "url": "",
+   "meta": {
+    "sources": 2
+   }
+  },
+  {
+   "id": "topic:youtube",
+   "kind": "topic",
+   "label": "youtube",
+   "url": "",
+   "meta": {
+    "sources": 2
+   }
+  },
+  {
+   "id": "topic:first",
+   "kind": "topic",
+   "label": "first",
+   "url": "",
+   "meta": {
+    "sources": 2
+   }
+  },
+  {
+   "id": "topic:karim",
+   "kind": "topic",
+   "label": "karim",
+   "url": "",
+   "meta": {
+    "sources": 2
+   }
+  },
+  {
+   "id": "topic:jawed",
+   "kind": "topic",
+   "label": "jawed",
+   "url": "",
+   "meta": {
+    "sources": 2
+   }
+  }
+ ],
+ "edges": [
+  {
+   "source": "tab:jNQXAC9IVRw",
+   "target": "chan:jawed",
+   "type": "authored_by",
+   "weight": 1.0
+  },
+  {
+   "source": "tab:0",
+   "target": "t1:https://iana.org/domains/example",
+   "type": "links_to",
+   "weight": 1.0
+  },
+  {
+   "source": "t1:jNQXAC9IVRw",
+   "target": "chan:jawed",
+   "type": "authored_by",
+   "weight": 1.0
+  },
+  {
+   "source": "t1:HHp4rjhJsWI",
+   "target": "chan:Moody Gardens",
+   "type": "authored_by",
+   "weight": 1.0
+  },
+  {
+   "source": "t1:PU-iJqVSohw",
+   "target": "chan:Siriusly",
+   "type": "authored_by",
+   "weight": 1.0
+  },
+  {
+   "source": "t1:h4rZt2vNyEg",
+   "target": "chan:So Arty!",
+   "type": "authored_by",
+   "weight": 1.0
+  },
+  {
+   "source": "tab:jNQXAC9IVRw",
+   "target": "t1:jNQXAC9IVRw",
+   "type": "same_as",
+   "weight": 1.0
+  },
+  {
+   "source": "tab:jNQXAC9IVRw",
+   "target": "topic:zoo",
+   "type": "mentions",
+   "weight": 0.6
+  },
+  {
+   "source": "t1:jNQXAC9IVRw",
+   "target": "topic:zoo",
+   "type": "mentions",
+   "weight": 0.6
+  },
+  {
+   "source": "tab:jNQXAC9IVRw",
+   "target": "topic:youtube",
+   "type": "mentions",
+   "weight": 0.6
+  },
+  {
+   "source": "t1:jNQXAC9IVRw",
+   "target": "topic:youtube",
+   "type": "mentions",
+   "weight": 0.6
+  },
+  {
+   "source": "tab:jNQXAC9IVRw",
+   "target": "topic:first",
+   "type": "mentions",
+   "weight": 0.6
+  },
+  {
+   "source": "t1:jNQXAC9IVRw",
+   "target": "topic:first",
+   "type": "mentions",
+   "weight": 0.6
+  },
+  {
+   "source": "tab:jNQXAC9IVRw",
+   "target": "topic:karim",
+   "type": "mentions",
+   "weight": 0.6
+  },
+  {
+   "source": "t1:jNQXAC9IVRw",
+   "target": "topic:karim",
+   "type": "mentions",
+   "weight": 0.6
+  },
+  {
+   "source": "tab:jNQXAC9IVRw",
+   "target": "topic:jawed",
+   "type": "mentions",
+   "weight": 0.6
+  },
+  {
+   "source": "t1:jNQXAC9IVRw",
+   "target": "topic:jawed",
+   "type": "mentions",
+   "weight": 0.6
+  }
+ ]
+}

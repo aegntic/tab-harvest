@@ -131,6 +131,8 @@ def cmd_graph(args: argparse.Namespace) -> int:
         argv += ["--out", args.out]
     if args.html:
         argv += ["--html", args.html]
+    if getattr(args, "theme", None):
+        argv += ["--theme", args.theme]
     return graph_builder.main(argv=argv)
 
 
@@ -160,6 +162,8 @@ def main(argv: list[str] | None = None) -> int:
                    help="input is an enriched graph.json; re-render only")
     g.add_argument("--out", default=None, help="output dir (default: beside input)")
     g.add_argument("--html", default=None, help="explicit html output path")
+    g.add_argument("--theme", default="etched", choices=["etched", "mono", "platinum", "wireframe"],
+                   help="default graph theme (all four remain toggleable in the UI)")
     g.set_defaults(func=cmd_graph)
 
     d = sub.add_parser("doctor", help="check dependencies + platform bring-up recipes")
