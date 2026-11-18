@@ -319,13 +319,47 @@ header{position:fixed;top:12px;left:12px;right:12px;z-index:20;display:flex;gap:
   box-shadow:var(--shadow)}
 #nores .q{font:12px var(--mono);color:var(--ink);margin-top:6px}
 @media (max-width:900px){ .meta,#stats{display:none} #kinds{max-width:90vw} }
+
+/* reports drawer (side panel) */
+#reports-btn{border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--ink);
+  font:11px var(--mono);border-radius:10px;padding:7px 11px;cursor:pointer;white-space:nowrap}
+#reports{position:fixed;top:12px;right:12px;bottom:12px;width:min(460px,94vw);z-index:40;
+  background:var(--panel-bg);border:1px solid var(--panel-border);border-radius:16px;
+  box-shadow:var(--sheet-shadow);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  transform:translateX(calc(100% + 20px));transition:transform .38s cubic-bezier(.22,.9,.3,1);
+  display:flex;flex-direction:column}
+#reports.open{transform:translateX(0)}
+#reports .rhead{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--hair)}
+#reports .rhead .rtitle{font:700 14px var(--sans);color:var(--ink);flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#reports .rhead button{border:1px solid var(--chip-border);background:var(--btn-bg);color:var(--muted);
+  font:11px var(--mono);border-radius:8px;padding:5px 9px;cursor:pointer}
+#reports .rbody{overflow-y:auto;flex:1;padding:14px 18px 20px}
+#reports .rlist .ritem{display:block;padding:8px 10px;margin:0 -8px;border-radius:10px;cursor:pointer;
+  font:12.5px var(--sans);color:var(--ink);border-bottom:1px solid var(--hair)}
+#reports .rlist .ritem:hover{background:var(--chip-bg)}
+#reports .rlist .ritem .rname{font:10px var(--mono);color:var(--muted);letter-spacing:.04em}
+#reports .rbody h1{font:700 19px/1.2 var(--sans);color:var(--ink);margin:4px 0 10px}
+#reports .rbody h2{font:700 15px var(--sans);color:var(--ink);margin:18px 0 8px;padding-top:10px;
+  border-top:1px solid var(--hair)}
+#reports .rbody h3{font:600 13px var(--sans);color:var(--ink);margin:14px 0 6px}
+#reports .rbody p{font:12.5px/1.55 var(--sans);color:var(--ink);opacity:.92;margin:6px 0}
+#reports .rbody li{font:12.5px/1.5 var(--sans);color:var(--ink);margin:4px 0 4px 4px}
+#reports .rbody a{color:var(--muted);text-decoration:underline dotted}
+#reports .rbody code{font:11px var(--mono);background:var(--chip-bg);border:1px solid var(--hair);
+  border-radius:5px;padding:1px 5px}
+#reports .rbody table{border-collapse:collapse;width:100%;margin:10px 0;font:12px var(--sans)}
+#reports .rbody th,#reports .rbody td{border:1px solid var(--hair);padding:6px 8px;text-align:left;
+  vertical-align:top;color:var(--ink)}
+#reports .rbody th{font:600 11.5px var(--sans)}
+#reports .rbody hr{border:0;border-top:1px solid var(--hair);margin:14px 0}
 </style>
 </head>
 <body>
 <header>
   <div class="brand">
     <span id="logofb" style="display:none;font:800 15px/34px var(--sans);letter-spacing:.02em">tab&#9654;harvest</span>
-    <img id="logo" src="__LOGO_SRC__" onerror="this.style.display='none';document.getElementById('logofb').style.display='block'" onerror="this.style.display='none';document.getElementById('logofb').style.display='block'" alt="tab-harvest">
+    <img id="logo" src="__LOGO_SRC__" onerror="this.style.display='none';document.getElementById('logofb').style.display='block'" alt="tab-harvest">
     <div class="meta" id="meta"></div>
   </div>
   <div class="searchbox">
@@ -341,6 +375,7 @@ header{position:fixed;top:12px;left:12px;right:12px;z-index:20;display:flex;gap:
     <button data-t="wire">Wire</button>
   </div>
   <button id="reset" title="Reset view">Reset</button>
+  <button id="reports-btn" title="Toggle reports">Reports</button>
 </header>
 <canvas id="cv"></canvas>
 <div id="kinds"></div>
@@ -350,6 +385,15 @@ header{position:fixed;top:12px;left:12px;right:12px;z-index:20;display:flex;gap:
   <button id="pclose" title="Close">×</button>
   <div class="scroll" id="pbody"></div>
 </aside>
+<aside id="reports">
+  <div class="rhead">
+    <div class="rtitle" id="rtitle">Reports</div>
+    <button id="rback" style="display:none">Back</button>
+    <button id="rclose" title="Close">×</button>
+  </div>
+  <div class="rbody" id="rbody"></div>
+</aside>
+
 <script>
 "use strict";
 const DATA = __DATA_JSON__;
@@ -695,6 +739,30 @@ function select(n){ selN=n; neigh=neighborhood(n); reheat(); hideTip();
 }
 pclose.onclick=()=>{ panel.classList.remove("open"); selN=null; neigh=null; };
 
+/* reports side panel */
+const REPORTS = __REPORTS_JSON__;
+const reportsEl=document.getElementById("reports"), rbody=document.getElementById("rbody"),
+      rtitle=document.getElementById("rtitle"), rback=document.getElementById("rback");
+function rList(){
+  rtitle.textContent = "Reports"; rback.style.display = "none";
+  let h = '<div class="rlist">';
+  if (REPORTS.index) h += `<div class="ritem" data-i="-1"><span class="rname">INDEX</span><br>${REPORTS.index.title}</div>`;
+  REPORTS.docs.forEach((d,i) => { h += `<div class="ritem" data-i="${i}"><span class="rname">${d.tab}</span><br>${d.title}</div>`; });
+  rbody.innerHTML = h + '</div>';
+  rbody.querySelectorAll(".ritem").forEach(el => el.onclick = () => {
+    const i = +el.dataset.i;
+    if (i === -1) rView(REPORTS.index.title, REPORTS.index.html);
+    else rView(REPORTS.docs[i].title, REPORTS.docs[i].html);
+  });
+}
+function rView(title, html){ rtitle.textContent = title; rback.style.display = "inline-block"; rbody.innerHTML = html; rbody.scrollTop = 0; }
+rback.onclick = rList;
+document.getElementById("rclose").onclick = () => reportsEl.classList.remove("open");
+document.getElementById("reports-btn").onclick = () => {
+  reportsEl.classList.toggle("open");
+  if (reportsEl.classList.contains("open")) rList();
+};
+
 /* search */
 const search=document.getElementById("search"), nores=document.getElementById("nores");
 function applySearch(){ const t=search.value.trim().toLowerCase();
@@ -756,7 +824,67 @@ window.__g = { nodes, edges, select, nodeAt, byId, setTheme };
 """
 
 
-def render_html(graph: dict, theme: str = "etched") -> str:
+
+_MD_RE_BOLD = re.compile(r"\*\*(.+?)\*\*")
+
+def _md_inline(s: str) -> str:
+    s = s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
+    s = _MD_RE_BOLD.sub(r"<strong>\1</strong>", s)
+    s = re.sub(r"(?<!\*)\*([^*\s][^*]*)\*(?!\*)", r"<em>\1</em>", s)
+    s = re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", r'<a href="\2" target="_blank" rel="noopener">\1</a>', s)
+    return s
+
+def md_to_html(md: str) -> str:
+    """Minimal markdown -> HTML for distillation files (headings, lists, tables, bold, links)."""
+    out, lines = [], md.split("\n")
+    i = 0
+    list_stack = []
+    def close_lists():
+        while list_stack:
+            out.append(f"</{list_stack.pop()}>")
+    while i < len(lines):
+        line = lines[i]
+        s = line.strip()
+        if not s:
+            close_lists(); i += 1; continue
+        if s == "---":
+            close_lists(); out.append("<hr>"); i += 1; continue
+        m = re.match(r"^(#{1,4}) (.*)", s)
+        if m:
+            close_lists()
+            lvl = len(m.group(1))
+            out.append(f"<h{lvl}>{_md_inline(m.group(2))}</h{lvl}>"); i += 1; continue
+        if s.startswith("|") and i + 1 < len(lines) and re.match(r"^\|[-\s|:]+\|$", lines[i+1].strip()):
+            close_lists()
+            rows = []
+            while i < len(lines) and lines[i].strip().startswith("|"):
+                cells = [c.strip() for c in lines[i].strip().strip("|").split("|")]
+                if not re.match(r"^\|[-\s|:]+\|$", lines[i].strip()):
+                    rows.append(cells)
+                i += 1
+            if rows:
+                out.append("<table><tr>" + "".join(f"<th>{_md_inline(c)}</th>" for c in rows[0]) + "</tr>")
+                for r in rows[1:]:
+                    out.append("<tr>" + "".join(f"<td>{_md_inline(c)}</td>" for c in r) + "</tr>")
+                out.append("</table>")
+            continue
+        m = re.match(r"^[-*] (.*)", s)
+        if m:
+            if not list_stack or list_stack[-1] != "ul":
+                close_lists(); list_stack.append("ul"); out.append("<ul>")
+            out.append(f"<li>{_md_inline(m.group(1))}</li>"); i += 1; continue
+        m = re.match(r"^\d+\. (.*)", s)
+        if m:
+            if not list_stack or list_stack[-1] != "ol":
+                close_lists(); list_stack.append("ol"); out.append("<ol>")
+            out.append(f"<li>{_md_inline(m.group(1))}</li>"); i += 1; continue
+        close_lists()
+        out.append(f"<p>{_md_inline(s)}</p>"); i += 1
+    close_lists()
+    return "\n".join(out)
+
+def render_html(graph: dict, theme: str = "etched", reports: dict | None = None) -> str:
     data_json = json.dumps(graph, ensure_ascii=False).replace("</", "<\\/")
     meta_title = (graph.get("meta") or "harvest").replace("<", "&lt;")
     logo_src = ""
@@ -765,11 +893,8 @@ def render_html(graph: dict, theme: str = "etched") -> str:
         if cand.exists():
             logo_src = "data:image/png;base64," + base64.b64encode(cand.read_bytes()).decode()
             break
-    html = (HTML_TEMPLATE
-            .replace("__DATA_JSON__", data_json)
-            .replace("__THEME_DEFAULT__", theme)
-            .replace("__THEME_DEFAULT_JSON__", json.dumps(theme))
-            .replace("__LOGO_SRC__", logo_src))
+    reports_json = json.dumps(reports or {"docs": []}, ensure_ascii=False).replace("</", "<\\/")
+    html = HTML_TEMPLATE.replace("__DATA_JSON__", data_json).replace("__THEME_DEFAULT__", theme).replace("__THEME_DEFAULT_JSON__", json.dumps(theme)).replace("__LOGO_SRC__", logo_src).replace("__REPORTS_JSON__", reports_json)
     return html.replace("<title>Knowledge Graph</title>",
                         f"<title>Knowledge Graph {meta_title}</title>", 1)
 
@@ -788,10 +913,27 @@ def main(argv: list[str] | None = None) -> int:
     out_dir = Path(args.out) if args.out else src.parent
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    reports = {"docs": []}
+    ddir = out_dir / "distilled"
+    if ddir.is_dir():
+        index_html, index_title = None, "INDEX"
+        docs = []
+        for f in sorted(ddir.glob("*.md")):
+            html = md_to_html(f.read_text(encoding="utf-8", errors="replace"))
+            title_m = re.search(r"^# (.+)$", html, re.M)
+            if f.name.startswith("INDEX"):
+                index_html, index_title = html, title_m.group(1).strip() if title_m else "INDEX"
+            else:
+                docs.append({"tab": f.name[:2], "file": f.name,
+                             "title": title_m.group(1).strip() if title_m else f.stem, "html": html})
+        if index_html or docs:
+            reports = {"index": ({"title": index_title, "html": index_html} if index_html else None),
+                       "docs": docs}
+
     if args.refresh:
         graph = json.loads(src.read_text(encoding="utf-8"))
         html_path = Path(args.html) if args.html else out_dir / "graph.html"
-        html_path.write_text(render_html(graph, args.theme), encoding="utf-8")
+        html_path.write_text(render_html(graph, args.theme, reports), encoding="utf-8")
         print(json.dumps({"ok": True, "graph": str(src), "html": str(html_path),
                           "nodes": len(graph.get("nodes", [])), "edges": len(graph.get("edges", []))}))
         return 0
@@ -799,7 +941,7 @@ def main(argv: list[str] | None = None) -> int:
     payload = json.loads(src.read_text(encoding="utf-8"))
     graph = build_graph(payload)
     (out_dir / "graph.json").write_text(json.dumps(graph, ensure_ascii=False, indent=1), encoding="utf-8")
-    (out_dir / "graph.html").write_text(render_html(graph, args.theme), encoding="utf-8")
+    (out_dir / "graph.html").write_text(render_html(graph, args.theme, reports), encoding="utf-8")
     print(json.dumps({"ok": True, "nodes": len(graph["nodes"]), "edges": len(graph["edges"]),
                       "graph": str(out_dir / "graph.json"), "html": str(out_dir / "graph.html")}))
     return 0
