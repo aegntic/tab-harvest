@@ -25,6 +25,8 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+OWN_RE = re.compile(r"(aegntic|1min247|mattaecooper\.org|cognitive-os|don-bot|tab-harvest|localhost)", re.I)
+
 STOPWORDS = set("""
 a about above after again all also am an and any are as at be because been
 before being below between both but by can cannot could did do does doing down
@@ -338,6 +340,8 @@ header{position:fixed;top:12px;left:12px;right:12px;z-index:20;display:flex;gap:
 #reports .rlist .ritem{display:block;padding:8px 10px;margin:0 -8px;border-radius:10px;cursor:pointer;
   font:12.5px var(--sans);color:var(--ink);border-bottom:1px solid var(--hair)}
 #reports .rlist .ritem:hover{background:var(--chip-bg)}
+#reports .rgroup{font:10px var(--mono);letter-spacing:.08em;color:var(--muted);
+  text-transform:uppercase;margin:12px 0 4px}
 #reports .rlist .ritem .rname{font:10px var(--mono);color:var(--muted);letter-spacing:.04em}
 #reports .rbody h1{font:700 19px/1.2 var(--sans);color:var(--ink);margin:4px 0 10px}
 #reports .rbody h2{font:700 15px var(--sans);color:var(--ink);margin:18px 0 8px;padding-top:10px;
@@ -424,6 +428,7 @@ const THEMES = {
 let theme = "etched";
 try { const s = localStorage.getItem("th-theme"); if (s && THEMES[s]) theme = s; } catch(e){}
 function T(){ return THEMES[theme]; }
+function isDark(){ return theme !== "etched"; }
 function KC(kind){ return T().kinds[kind] || T().fallback; }
 
 const tip=document.getElementById("tip"), panel=document.getElementById("panel"),
@@ -449,6 +454,10 @@ nodes.forEach((n,i) => { n.idx=i;
   const a = i * 2.39; const rad = 140 + 90*Math.sqrt(i+1);
   n.x = Math.cos(a)*rad; n.y = Math.sin(a)*rad*.72;
   n.vx=0; n.vy=0; n.deg=0; n.match=true; n.hidden=false; n.hr=1; });
+const OWN_RE = /(aegntic|1min247|mattaecooper\.org|cognitive-os|don-bot|tab-harvest|localhost)/i;
+function isOwn(n){ return OWN_RE.test(n.url || ""); }
+nodes.forEach(n => { n.own = isOwn(n); n.ownHidden = false; });
+let mineOff = false;
 const adj = new Map(nodes.map(n => [n.id,[]]));
 edges.forEach(e => { if(byId.has(e.source)&&byId.has(e.target)) {
   byId.get(e.source).deg++; byId.get(e.target).deg++;
@@ -584,9 +593,9 @@ function draw(){
   ctx.clearRect(0,0,W,H);
   drawUnderlay();
   ctx.lineCap = "round";
-  const dark = theme !== "etched";
+  const dark = isDark();
   edges.forEach(e => { const a=byId.get(e.source), b=byId.get(e.target); if(!a||!b) return;
-    if(a.hidden||b.hidden) return;
+    if(a.hidden||b.hidden||a.ownHidden||b.ownHidden) return;
     const ap = Math.min(appear(a), appear(b)); if(ap<=0) return;
     const x1=sx(a),y1=sy(a),x2=sx(b),y2=sy(b);
     const mx=(x1+x2)/2, my=(y1+y2)/2;
@@ -601,7 +610,7 @@ function draw(){
     ctx.lineWidth = Math.max(1, (e.type==="links_to"?2:1.35)*Math.min(1.6,scale));
     ctx.beginPath(); ctx.moveTo(x1,y1); ctx.quadraticCurveTo(cx2,cy2,x2,y2); ctx.stroke(); });
   ctx.globalAlpha = 1;
-  nodes.forEach(n => { if(n.hidden) return;
+  nodes.forEach(n => { if(n.hidden || n.ownHidden) return;
     const ap = appear(n); if(ap<=0) return;
     const x=sx(n), y=sy(n), r=n.r*n.hr*scale*ease(ap);
     if(x<-r*4||x>W+r*4||y<-r*4||y>H+r*4) return;
@@ -615,6 +624,14 @@ function draw(){
       ctx.globalAlpha = .55*ease(ap);
       ctx.strokeStyle = KC(n.kind); ctx.lineWidth = 1.2;
       ctx.beginPath(); ctx.arc(x,y,r+5,0,7); ctx.stroke(); }
+    if (n.own){
+      ctx.globalAlpha = .5*ease(ap);
+      ctx.setLineDash([4,3]);
+      ctx.strokeStyle = dark ? "rgba(255,255,255,.5)" : "rgba(25,26,28,.55)";
+      ctx.lineWidth = 1.1;
+      ctx.beginPath(); ctx.arc(x,y,r+9,0,7); ctx.stroke();
+      ctx.setLineDash([]);
+    }
     const wantLabel = (n===hoverN||n===selN) ||
       (!(n.meta&&n.meta.twin) && (neigh&&neigh.has(n.id))) ||
       (!(n.meta&&n.meta.twin) && scale>.85 && n.match && (n.deg>2||n.kind==="video"||n.kind==="concept"));
@@ -657,7 +674,7 @@ cv.addEventListener("wheel", e => { e.preventDefault();
   const ns = Math.min(4.5, Math.max(.16, scale*f));
   ox = px-(px-ox)*(ns/scale); oy = py-(py-oy)*(ns/scale); scale = ns; }, {passive:false});
 function nodeAt(px,py){ let best=null,bd=1e9;
-  nodes.forEach(n => { if(n.hidden) return;
+  nodes.forEach(n => { if(n.hidden || n.ownHidden) return;
     const dx=sx(n)-px, dy=sy(n)-py, d=dx*dx+dy*dy, r=(n.r*n.hr+5)*scale;
     if(d<r*r && d<bd){ bd=d; best=n; } }); return best; }
 cv.addEventListener("mousedown", e => { const n=nodeAt(e.offsetX,e.offsetY);
@@ -745,9 +762,13 @@ const reportsEl=document.getElementById("reports"), rbody=document.getElementByI
       rtitle=document.getElementById("rtitle"), rback=document.getElementById("rback");
 function rList(){
   rtitle.textContent = "Reports"; rback.style.display = "none";
+  const ownDocs = REPORTS.docs.map((d,i) => ({d,i})).filter(x => x.d.own);
+  const resDocs = REPORTS.docs.map((d,i) => ({d,i})).filter(x => !x.d.own);
+  const item = x => `<div class="ritem" data-i="${x.i}"><span class="rname">${x.d.tab}${x.d.own ? " · yours" : ""}</span><br>${x.d.title}</div>`;
   let h = '<div class="rlist">';
   if (REPORTS.index) h += `<div class="ritem" data-i="-1"><span class="rname">INDEX</span><br>${REPORTS.index.title}</div>`;
-  REPORTS.docs.forEach((d,i) => { h += `<div class="ritem" data-i="${i}"><span class="rname">${d.tab}</span><br>${d.title}</div>`; });
+  if (ownDocs.length) h += `<div class="rgroup">YOUR STACK (${ownDocs.length})</div>` + ownDocs.map(item).join("");
+  if (resDocs.length) h += `<div class="rgroup">RESEARCH (${resDocs.length})</div>` + resDocs.map(item).join("");
   rbody.innerHTML = h + '</div>';
   rbody.querySelectorAll(".ritem").forEach(el => el.onclick = () => {
     const i = +el.dataset.i;
@@ -802,6 +823,12 @@ function buildKinds(){
       if (el.classList.contains("off")) kindOff.add(kind); else kindOff.delete(kind);
       nodes.forEach(n=>{ if(n.kind===kind) n.hidden=el.classList.contains("off"); }); };
     kindsEl.appendChild(el); });
+  const mp = document.createElement("div"); mp.className = "kind-pill"; mp.title = "Toggle your own tabs";
+  const mineCount = nodes.filter(n => n.own).length;
+  mp.innerHTML = `<span class="dot" style="background:${isDark() ? "#ffffff" : "#191a1c"};outline:1px dashed ${isDark() ? "rgba(255,255,255,.6)" : "rgba(25,26,28,.6)"};outline-offset:1px"></span>mine<span class="n">${mineCount}</span>`;
+  mp.onclick = () => { mineOff = !mineOff; mp.classList.toggle("off", mineOff);
+    nodes.forEach(n => { if (n.own) n.ownHidden = mineOff; }); };
+  kindsEl.appendChild(mp);
 }
 buildKinds();
 setTheme(theme);
@@ -899,6 +926,35 @@ def render_html(graph: dict, theme: str = "etched", reports: dict | None = None)
                         f"<title>Knowledge Graph {meta_title}</title>", 1)
 
 
+def collect_reports(out_dir: Path, graph: dict) -> dict:
+    """Embed distilled/ (INDEX + per-source distills) as the reports side panel."""
+    reports = {"docs": []}
+    ddir = out_dir / "distilled"
+    if not ddir.is_dir():
+        return reports
+    index_html, index_title = None, "INDEX"
+    docs = []
+    idx_url = {}
+    for n in graph.get("nodes", []):
+        nid = n.get("id", "")
+        if nid.startswith("tab:") and nid[4:].isdigit():
+            idx_url[int(nid[4:])] = n.get("url", "")
+    for f in sorted(ddir.glob("*.md")):
+        html = md_to_html(f.read_text(encoding="utf-8", errors="replace"))
+        title_m = re.search(r"^# (.+)$", html, re.M)
+        if f.name.startswith("INDEX"):
+            index_html, index_title = html, title_m.group(1).strip() if title_m else "INDEX"
+        else:
+            tab_no = int(f.name[:2]) if f.name[:2].isdigit() else -1
+            url = idx_url.get(tab_no, "")
+            docs.append({"tab": f.name[:2], "file": f.name, "own": bool(OWN_RE.search(url)),
+                         "title": title_m.group(1).strip() if title_m else f.stem, "html": html})
+    if index_html or docs:
+        reports = {"index": ({"title": index_title, "html": index_html} if index_html else None),
+                   "docs": docs}
+    return reports
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("harvest", help="harvest.json (or graph.json with --refresh)")
@@ -913,25 +969,9 @@ def main(argv: list[str] | None = None) -> int:
     out_dir = Path(args.out) if args.out else src.parent
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    reports = {"docs": []}
-    ddir = out_dir / "distilled"
-    if ddir.is_dir():
-        index_html, index_title = None, "INDEX"
-        docs = []
-        for f in sorted(ddir.glob("*.md")):
-            html = md_to_html(f.read_text(encoding="utf-8", errors="replace"))
-            title_m = re.search(r"^# (.+)$", html, re.M)
-            if f.name.startswith("INDEX"):
-                index_html, index_title = html, title_m.group(1).strip() if title_m else "INDEX"
-            else:
-                docs.append({"tab": f.name[:2], "file": f.name,
-                             "title": title_m.group(1).strip() if title_m else f.stem, "html": html})
-        if index_html or docs:
-            reports = {"index": ({"title": index_title, "html": index_html} if index_html else None),
-                       "docs": docs}
-
     if args.refresh:
         graph = json.loads(src.read_text(encoding="utf-8"))
+        reports = collect_reports(out_dir, graph)
         html_path = Path(args.html) if args.html else out_dir / "graph.html"
         html_path.write_text(render_html(graph, args.theme, reports), encoding="utf-8")
         print(json.dumps({"ok": True, "graph": str(src), "html": str(html_path),
@@ -940,6 +980,7 @@ def main(argv: list[str] | None = None) -> int:
 
     payload = json.loads(src.read_text(encoding="utf-8"))
     graph = build_graph(payload)
+    reports = collect_reports(out_dir, graph)
     (out_dir / "graph.json").write_text(json.dumps(graph, ensure_ascii=False, indent=1), encoding="utf-8")
     (out_dir / "graph.html").write_text(render_html(graph, args.theme, reports), encoding="utf-8")
     print(json.dumps({"ok": True, "nodes": len(graph["nodes"]), "edges": len(graph["edges"]),
